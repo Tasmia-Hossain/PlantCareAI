@@ -1,0 +1,160 @@
+@model PlantCareAI.Models.Plant
+
+@{
+    ViewData["Title"] = "Add Plant";
+}
+
+<div class="container py-4">
+
+    <div class="mb-4">
+        <h1 class="fw-bold">Add New Plant</h1>
+        <p class="text-muted">Add your plant details to start tracking its care.</p>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-8 col-lg-6">
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+
+                    <form asp-action="Create">
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Name" class="form-label">
+                                Plant Name
+                            </label>
+
+                            <input asp-for="Name"
+                                   class="form-control"
+                                   placeholder="e.g. Money Plant" />
+
+                            <span asp-validation-for="Name"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Species" class="form-label">
+                                Species
+                            </label>
+
+                            <input asp-for="Species"
+                                   class="form-control"
+                                   placeholder="e.g. Epipremnum aureum" />
+
+                            <span asp-validation-for="Species"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label">
+                                Description
+                            </label>
+
+                            <textarea asp-for="Description"
+                                      class="form-control"
+                                      rows="4"
+                                      placeholder="Tell us about your plant..."></textarea>
+
+                            <span asp-validation-for="Description"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Location" class="form-label">
+                                Location
+                            </label>
+
+                            <input asp-for="Location"
+                                   class="form-control"
+                                   placeholder="e.g. Bedroom" />
+
+                            <span asp-validation-for="Location"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="SunlightRequirement" class="form-label">
+                                Sunlight Requirement
+                            </label>
+
+                            <input asp-for="SunlightRequirement"
+                                   class="form-control"
+                                   placeholder="e.g. Indirect sunlight" />
+
+                            <span asp-validation-for="SunlightRequirement"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="WateringFrequency" class="form-label">
+                                Watering Frequency
+                            </label>
+
+                            <input asp-for="WateringFrequency"
+                                   class="form-control"
+                                   placeholder="e.g. Twice a week" />
+
+                            <span asp-validation-for="WateringFrequency"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="DateAdded" class="form-label">
+                                Date Added
+                            </label>
+
+                            <input asp-for="DateAdded"
+                                   type="date"
+                                   class="form-control" />
+
+                            <span asp-validation-for="DateAdded"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="ImageUrl" class="form-label">
+                                Image URL
+                            </label>
+
+                            <input asp-for="ImageUrl"
+                                   class="form-control"
+                                   placeholder="https://..." />
+
+                            <span asp-validation-for="ImageUrl"
+                                  class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex gap-2">
+
+                            <button type="submit"
+                                    class="btn btn-success">
+                                Add Plant
+                            </button>
+
+                            <a asp-action="Index"
+                               class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
