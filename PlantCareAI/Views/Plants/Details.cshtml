@@ -1,80 +1,402 @@
 @model PlantCareAI.Models.Plant
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = Model.Name;
 }
 
-<h1>Details</h1>
+<div class="container py-4">
 
-<div>
-    <h4>Plant</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Species)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Species)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Location)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Location)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SunlightRequirement)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SunlightRequirement)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.WateringFrequency)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.WateringFrequency)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateAdded)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateAdded)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageUrl)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageUrl)
-        </dd>
-    </dl>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserId)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+            <h1 class="fw-bold mb-1">
+                🌿 @Model.Name
+            </h1>
+
+            <p class="text-muted fst-italic mb-0">
+                @Model.Species
+            </p>
+        </div>
+
+        <div class="d-flex gap-2">
+
+            <a asp-action="Edit"
+               asp-route-id="@Model.Id"
+               class="btn btn-outline-primary">
+                Edit
+            </a>
+
+            <a asp-action="Index"
+               class="btn btn-outline-secondary">
+                Back
+            </a>
+
+        </div>
+
+    </div>
+
+
+    <!-- Plant Overview -->
+    <div class="card shadow-sm border-0 mb-4">
+
+        <div class="row g-0">
+
+            <div class="col-md-5">
+
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl"
+                         alt="@Model.Name"
+                         class="img-fluid w-100 h-100"
+                         style="object-fit:cover; min-height:320px;" />
+                }
+                else
+                {
+                    <div class="bg-light d-flex align-items-center justify-content-center"
+                         style="height:320px;">
+                        <span class="text-muted">
+                            No image available
+                        </span>
+                    </div>
+                }
+
+            </div>
+
+            <div class="col-md-7">
+
+                <div class="card-body p-4">
+
+                    <h3 class="fw-bold mb-4">
+                        Plant Information
+                    </h3>
+
+                    @if (!string.IsNullOrEmpty(Model.Description))
+                    {
+                        <p class="mb-4">
+                            @Model.Description
+                        </p>
+                    }
+
+                    <div class="row g-3">
+
+                        <div class="col-sm-6">
+                            <strong>Location</strong>
+                            <div class="text-muted">
+                                @(Model.Location ?? "Not specified")
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <strong>Sunlight</strong>
+                            <div class="text-muted">
+                                @(Model.SunlightRequirement ?? "Not specified")
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <strong>Watering</strong>
+                            <div class="text-muted">
+                                @(Model.WateringFrequency ?? "Not specified")
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <strong>Added</strong>
+                            <div class="text-muted">
+                                @Model.DateAdded.ToString("dd MMM yyyy")
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Care Tracking -->
+    <div class="row g-4">
+
+
+        <!-- Watering -->
+        <div class="col-md-6">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+
+                        <h4 class="fw-bold mb-0">
+                            💧 Watering
+                        </h4>
+
+                        <form asp-controller="Care"
+                              asp-action="Water"
+                              method="post">
+
+                            <input type="hidden"
+                                   name="plantId"
+                                   value="@Model.Id" />
+
+                            <button type="submit"
+                                    class="btn btn-success btn-sm">
+                                Mark as Watered
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                    @if (Model.WateringRecords.Any())
+                    {
+                        <p class="text-muted">
+                            Last watered:
+                            <strong>
+                                @(Model.WateringRecords
+                                    .OrderByDescending(x => x.WateredAt)
+                                    .First()
+                                    .WateredAt
+                                    .ToString("dd MMM yyyy"))
+                            </strong>
+                        </p>
+
+                        <hr />
+
+                        <h6>Recent Records</h6>
+
+                        <ul class="list-group list-group-flush">
+
+                            @foreach (var record in Model.WateringRecords
+                                .OrderByDescending(x => x.WateredAt)
+                                .Take(5))
+                            {
+                                <li class="list-group-item px-0">
+                                    @record.WateredAt.ToString("dd MMM yyyy")
+
+                                    @if (!string.IsNullOrEmpty(record.Notes))
+                                    {
+                                        <span class="text-muted">
+                                            — @record.Notes
+                                        </span>
+                                    }
+                                </li>
+                            }
+
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">
+                            No watering records yet.
+                        </p>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Fertilizing -->
+        <div class="col-md-6">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+
+                        <h4 class="fw-bold mb-0">
+                            🌱 Fertilizing
+                        </h4>
+
+                        <a asp-controller="Care"
+                           asp-action="AddFertilizer"
+                           asp-route-plantId="@Model.Id"
+                           class="btn btn-outline-success btn-sm">
+                            Add Record
+                        </a>
+
+                    </div>
+
+                    @if (Model.FertilizingRecords.Any())
+                    {
+                        <p class="text-muted">
+                            Last fertilized:
+                            <strong>
+                                @(Model.FertilizingRecords
+                                    .OrderByDescending(x => x.FertilizedAt)
+                                    .First()
+                                    .FertilizedAt
+                                    .ToString("dd MMM yyyy"))
+                            </strong>
+                        </p>
+
+                        <hr />
+
+                        <ul class="list-group list-group-flush">
+
+                            @foreach (var record in Model.FertilizingRecords
+                                .OrderByDescending(x => x.FertilizedAt)
+                                .Take(5))
+                            {
+                                <li class="list-group-item px-0">
+
+                                    <strong>
+                                        @record.FertilizedAt.ToString("dd MMM yyyy")
+                                    </strong>
+
+                                    @if (!string.IsNullOrEmpty(record.Fertilizer))
+                                    {
+                                        <span>
+                                            — @record.Fertilizer
+                                        </span>
+                                    }
+
+                                </li>
+                            }
+
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">
+                            No fertilizing records yet.
+                        </p>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Health -->
+        <div class="col-md-6">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+
+                        <h4 class="fw-bold mb-0">
+                            ❤️ Health
+                        </h4>
+
+                        <a asp-controller="Care"
+                           asp-action="AddHealth"
+                           asp-route-plantId="@Model.Id"
+                           class="btn btn-outline-danger btn-sm">
+                            Record Health
+                        </a>
+
+                    </div>
+
+                    @if (Model.HealthRecords.Any())
+                    {
+                        var latestHealth = Model.HealthRecords
+                            .OrderByDescending(x => x.RecordedAt)
+                            .First();
+
+                        <p>
+                            <strong>Status:</strong>
+                            @latestHealth.HealthStatus
+                        </p>
+
+                        @if (!string.IsNullOrEmpty(latestHealth.Symptoms))
+                        {
+                            <p>
+                                <strong>Symptoms:</strong>
+                                @latestHealth.Symptoms
+                            </p>
+                        }
+
+                        <small class="text-muted">
+                            Recorded
+                            @latestHealth.RecordedAt.ToString("dd MMM yyyy")
+                        </small>
+                    }
+                    else
+                    {
+                        <p class="text-muted">
+                            No health records yet.
+                        </p>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Journal -->
+        <div class="col-md-6">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body p-4">
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+
+                        <h4 class="fw-bold mb-0">
+                            📖 Journal
+                        </h4>
+
+                        <a asp-controller="Care"
+                           asp-action="AddJournal"
+                           asp-route-plantId="@Model.Id"
+                           class="btn btn-outline-primary btn-sm">
+                            Add Entry
+                        </a>
+
+                    </div>
+
+                    @if (Model.JournalEntries.Any())
+                    {
+                        @foreach (var entry in Model.JournalEntries
+                            .OrderByDescending(x => x.CreatedAt)
+                            .Take(3))
+                        {
+                            <div class="border-bottom pb-3 mb-3">
+
+                                <h6 class="fw-bold">
+                                    @entry.Title
+                                </h6>
+
+                                <p class="mb-1">
+                                    @entry.Content
+                                </p>
+
+                                <small class="text-muted">
+                                    @entry.CreatedAt.ToString("dd MMM yyyy")
+                                </small>
+
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <p class="text-muted">
+                            No journal entries yet.
+                        </p>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </div>

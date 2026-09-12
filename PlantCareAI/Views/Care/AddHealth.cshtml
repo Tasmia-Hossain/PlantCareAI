@@ -1,0 +1,144 @@
+﻿@model PlantCareAI.Models.HealthRecord
+
+@{
+    ViewData["Title"] = "Record Plant Health";
+}
+
+<div class="container py-4">
+
+    <div class="mb-4">
+        <h1 class="fw-bold">Record Plant Health</h1>
+        <p class="text-muted">
+            Record the current health condition of @ViewBag.PlantName.
+        </p>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-7">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body p-4">
+
+                    <form asp-action="AddHealth">
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3"></div>
+
+                        <input type="hidden"
+                               asp-for="PlantId" />
+
+                        <div class="mb-3">
+
+                            <label asp-for="RecordedAt"
+                                   class="form-label">
+                                Date
+                            </label>
+
+                            <input asp-for="RecordedAt"
+                                   type="date"
+                                   class="form-control" />
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label asp-for="HealthStatus"
+                                   class="form-label">
+                                Health Status
+                            </label>
+
+                            <select asp-for="HealthStatus"
+                                    class="form-select">
+
+                                <option value="">
+                                    Select status
+                                </option>
+
+                                <option value="Healthy">
+                                    Healthy
+                                </option>
+
+                                <option value="Needs Attention">
+                                    Needs Attention
+                                </option>
+
+                                <option value="Critical">
+                                    Critical
+                                </option>
+
+                            </select>
+
+                            <span asp-validation-for="HealthStatus"
+                                  class="text-danger"></span>
+
+                        </div>
+
+
+                        <div class="mb-3">
+
+                            <label asp-for="Symptoms"
+                                   class="form-label">
+                                Symptoms
+                            </label>
+
+                            <textarea asp-for="Symptoms"
+                                      class="form-control"
+                                      rows="4"
+                                      placeholder="Yellow leaves, drooping, spots, etc."></textarea>
+
+                            <span asp-validation-for="Symptoms"
+                                  class="text-danger"></span>
+
+                        </div>
+
+
+                        <div class="mb-4">
+
+                            <label asp-for="Notes"
+                                   class="form-label">
+                                Notes
+                            </label>
+
+                            <textarea asp-for="Notes"
+                                      class="form-control"
+                                      rows="4"></textarea>
+
+                        </div>
+
+
+                        <div class="d-flex gap-2">
+
+                            <button type="submit"
+                                    class="btn btn-danger">
+                                Save Health Record
+                            </button>
+
+                            <a asp-controller="Plants"
+                               asp-action="Details"
+                               asp-route-id="@Model.PlantId"
+                               class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

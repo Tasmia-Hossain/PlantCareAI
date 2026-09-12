@@ -33,19 +33,19 @@ namespace PlantCareAI.Controllers
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
-            {
                 return NotFound();
-            }
 
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var plant = await _context.Plants
+                .Include(p => p.WateringRecords)
+                .Include(p => p.FertilizingRecords)
+                .Include(p => p.HealthRecords)
+                .Include(p => p.JournalEntries)
                 .FirstOrDefaultAsync(p => p.Id == id && p.UserId == userId);
 
             if (plant == null)
-            {
                 return NotFound();
-            }
 
             return View(plant);
         }

@@ -1,0 +1,113 @@
+﻿@model PlantCareAI.Models.FertilizingRecord
+
+@{
+    ViewData["Title"] = "Add Fertilizer Record";
+}
+
+<div class="container py-4">
+
+    <div class="mb-4">
+        <h1 class="fw-bold">Add Fertilizer Record</h1>
+        <p class="text-muted">
+            Record fertilizer care for @ViewBag.PlantName.
+        </p>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-6">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body p-4">
+
+                    <form asp-action="AddFertilizer">
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3"></div>
+
+                        <input type="hidden"
+                               asp-for="PlantId" />
+
+                        <div class="mb-3">
+
+                            <label asp-for="FertilizedAt"
+                                   class="form-label">
+                                Date
+                            </label>
+
+                            <input asp-for="FertilizedAt"
+                                   type="date"
+                                   class="form-control" />
+
+                            <span asp-validation-for="FertilizedAt"
+                                  class="text-danger"></span>
+
+                        </div>
+
+                        <div class="mb-3">
+
+                            <label asp-for="Fertilizer"
+                                   class="form-label">
+                                Fertilizer
+                            </label>
+
+                            <input asp-for="Fertilizer"
+                                   class="form-control"
+                                   placeholder="e.g. Liquid fertilizer" />
+
+                            <span asp-validation-for="Fertilizer"
+                                  class="text-danger"></span>
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label asp-for="Notes"
+                                   class="form-label">
+                                Notes
+                            </label>
+
+                            <textarea asp-for="Notes"
+                                      class="form-control"
+                                      rows="4"
+                                      placeholder="Any additional notes..."></textarea>
+
+                            <span asp-validation-for="Notes"
+                                  class="text-danger"></span>
+
+                        </div>
+
+                        <div class="d-flex gap-2">
+
+                            <button type="submit"
+                                    class="btn btn-success">
+                                Save Record
+                            </button>
+
+                            <a asp-controller="Plants"
+                               asp-action="Details"
+                               asp-route-id="@Model.PlantId"
+                               class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
