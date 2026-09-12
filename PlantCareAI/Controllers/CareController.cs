@@ -22,9 +22,8 @@ namespace PlantCareAI.Controllers
         // WATERING
         // =========================
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Water(int plantId)
+        [HttpGet]
+        public async Task<IActionResult> AddWatering(int plantId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -34,20 +33,53 @@ namespace PlantCareAI.Controllers
             if (plant == null)
                 return NotFound();
 
+            ViewBag.PlantName = plant.Name;
+
             var record = new WateringRecord
             {
                 PlantId = plantId,
                 WateredAt = DateTime.Now
             };
 
-            _context.WateringRecords.Add(record);
+            return View(record);
+        }
 
-            await _context.SaveChangesAsync();
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddWatering(WateringRecord record)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            return RedirectToAction(
-                "Details",
-                "Plants",
-                new { id = plantId });
+            var plant = await _context.Plants
+                .FirstOrDefaultAsync(
+                    p => p.Id == record.PlantId &&
+                         p.UserId == userId);
+
+            if (plant == null)
+                return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                var newRecord = new WateringRecord
+                {
+                    PlantId = plant.Id,
+                    WateredAt = record.WateredAt,
+                    Notes = record.Notes
+                };
+
+                _context.WateringRecords.Add(newRecord);
+
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(
+                    "Details",
+                    "Plants",
+                    new { id = plant.Id });
+            }
+
+            ViewBag.PlantName = plant.Name;
+
+            return View(record);
         }
 
 

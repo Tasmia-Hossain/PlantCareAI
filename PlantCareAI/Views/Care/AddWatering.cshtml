@@ -1,0 +1,90 @@
+﻿@model PlantCareAI.Models.WateringRecord
+
+@{
+    ViewData["Title"] = "Add Watering Record";
+}
+
+<div class="container py-4">
+
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body p-4">
+
+                    <h2 class="fw-bold mb-1">💧 Add Watering Record</h2>
+
+                    <p class="text-muted mb-4">
+                        Record watering for <strong>@ViewBag.PlantName</strong>
+                    </p>
+
+                    <form asp-action="AddWatering" method="post">
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3">
+                        </div>
+
+                        <input type="hidden" asp-for="PlantId" />
+
+                        <div class="mb-3">
+                            <label asp-for="WateredAt"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <input asp-for="WateredAt"
+                                   type="datetime-local"
+                                   class="form-control" />
+
+                            <span asp-validation-for="WateredAt"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Notes"
+                                   class="form-label fw-semibold">
+                            </label>
+
+                            <textarea asp-for="Notes"
+                                      class="form-control"
+                                      rows="4"
+                                      placeholder="Optional watering notes...">
+                            </textarea>
+
+                            <span asp-validation-for="Notes"
+                                  class="text-danger">
+                            </span>
+                        </div>
+
+                        <div class="d-flex gap-2">
+
+                            <button type="submit"
+                                    class="btn btn-success">
+                                Save Watering Record
+                            </button>
+
+                            <a asp-controller="Plants"
+                               asp-action="Details"
+                               asp-route-id="@Model.PlantId"
+                               class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

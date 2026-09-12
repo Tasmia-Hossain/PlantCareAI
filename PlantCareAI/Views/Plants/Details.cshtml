@@ -136,20 +136,12 @@
                             💧 Watering
                         </h4>
 
-                        <form asp-controller="Care"
-                              asp-action="Water"
-                              method="post">
-
-                            <input type="hidden"
-                                   name="plantId"
-                                   value="@Model.Id" />
-
-                            <button type="submit"
-                                    class="btn btn-success btn-sm">
-                                Mark as Watered
-                            </button>
-
-                        </form>
+                        <a asp-controller="Care"
+                           asp-action="AddWatering"
+                           asp-route-plantId="@Model.Id"
+                           class="btn btn-success btn-sm">
+                            Mark as Watered
+                        </a>
 
                     </div>
 
