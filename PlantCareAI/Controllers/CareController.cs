@@ -250,8 +250,7 @@ namespace PlantCareAI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddJournal(
-            JournalEntry entry)
+        public async Task<IActionResult> AddJournal(JournalEntry entry)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -265,14 +264,22 @@ namespace PlantCareAI.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.JournalEntries.Add(entry);
+                var newEntry = new JournalEntry
+                {
+                    PlantId = plant.Id,
+                    CreatedAt = entry.CreatedAt,
+                    Title = entry.Title,
+                    Content = entry.Content
+                };
+
+                _context.JournalEntries.Add(newEntry);
 
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(
                     "Details",
                     "Plants",
-                    new { id = entry.PlantId });
+                    new { id = plant.Id });
             }
 
             ViewBag.PlantName = plant.Name;
