@@ -109,11 +109,9 @@ namespace PlantCareAI.Controllers
             return View(record);
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddFertilizer(
-            FertilizingRecord record)
+        public async Task<IActionResult> AddFertilizer(FertilizingRecord record)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -127,14 +125,22 @@ namespace PlantCareAI.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.FertilizingRecords.Add(record);
+                var newRecord = new FertilizingRecord
+                {
+                    PlantId = plant.Id,
+                    FertilizedAt = record.FertilizedAt,
+                    Fertilizer = record.Fertilizer,
+                    Notes = record.Notes
+                };
+
+                _context.FertilizingRecords.Add(newRecord);
 
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(
                     "Details",
                     "Plants",
-                    new { id = record.PlantId });
+                    new { id = plant.Id });
             }
 
             ViewBag.PlantName = plant.Name;

@@ -21,7 +21,7 @@
 
                 <div class="card-body p-4">
 
-                    <form asp-action="AddFertilizer">
+                    <form asp-action="AddFertilizer" method="post">
 
                         <div asp-validation-summary="ModelOnly"
                              class="text-danger mb-3"></div>
@@ -33,11 +33,11 @@
 
                             <label asp-for="FertilizedAt"
                                    class="form-label">
-                                Date
+                                Date & Time
                             </label>
 
                             <input asp-for="FertilizedAt"
-                                   type="date"
+                                   type="datetime-local"
                                    class="form-control" />
 
                             <span asp-validation-for="FertilizedAt"
