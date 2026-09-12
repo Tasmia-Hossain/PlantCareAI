@@ -7,25 +7,38 @@
 <div class="container py-4">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
+
         <div>
-            <h1 class="fw-bold mb-1">My Plants</h1>
-            <p class="text-muted mb-0">Manage and track your plants.</p>
+            <h1 class="fw-bold mb-1">🌿 My Plants</h1>
+            <p class="text-muted mb-0">
+                Keep track of your plants and their care.
+            </p>
         </div>
 
-        <a asp-action="Create" class="btn btn-success">
+        <a asp-action="Create"
+           class="btn btn-success">
             + Add Plant
         </a>
+
     </div>
 
     @if (!Model.Any())
     {
-        <div class="text-center py-5">
-            <h4>No plants added yet.</h4>
-            <p class="text-muted">Start by adding your first plant.</p>
+        <div class="card shadow-sm border-0">
+            <div class="card-body text-center py-5">
 
-            <a asp-action="Create" class="btn btn-success">
-                Add Your First Plant
-            </a>
+                <h3>No plants yet 🌱</h3>
+
+                <p class="text-muted">
+                    Add your first plant to start tracking its care.
+                </p>
+
+                <a asp-action="Create"
+                   class="btn btn-success">
+                    Add Your First Plant
+                </a>
+
+            </div>
         </div>
     }
     else
@@ -36,7 +49,7 @@
             {
                 <div class="col-md-6 col-lg-4">
 
-                    <div class="card h-100 shadow-sm border-0">
+                    <div class="card shadow-sm border-0 h-100">
 
                         @if (!string.IsNullOrEmpty(plant.ImageUrl))
                         {
@@ -49,64 +62,49 @@
                         {
                             <div class="bg-light d-flex align-items-center justify-content-center"
                                  style="height:220px;">
-                                <span class="text-muted">No image</span>
+                                <span class="text-muted">
+                                    No image
+                                </span>
                             </div>
                         }
 
                         <div class="card-body">
 
-                            <h4 class="card-title fw-bold">
-                                @plant.Name
+                            <h4 class="fw-bold mb-1">
+                                🌿 @plant.Name
                             </h4>
 
                             <p class="text-muted fst-italic">
                                 @plant.Species
                             </p>
 
-                            @if (!string.IsNullOrEmpty(plant.Location))
-                            {
-                                <p class="mb-2">
-                                    <strong>Location:</strong> @plant.Location
-                                </p>
-                            }
+                            <div class="small text-muted mb-3">
 
-                            @if (!string.IsNullOrEmpty(plant.SunlightRequirement))
-                            {
-                                <p class="mb-2">
-                                    <strong>Sunlight:</strong> @plant.SunlightRequirement
-                                </p>
-                            }
+                                @if (!string.IsNullOrEmpty(plant.Location))
+                                {
+                                    <div>📍 @plant.Location</div>
+                                }
 
-                            @if (!string.IsNullOrEmpty(plant.WateringFrequency))
-                            {
-                                <p class="mb-3">
-                                    <strong>Watering:</strong> @plant.WateringFrequency
-                                </p>
-                            }
+                                @if (!string.IsNullOrEmpty(plant.WateringFrequency))
+                                {
+                                    <div>💧 @plant.WateringFrequency</div>
+                                }
 
-                            <div class="d-flex gap-2">
-
-                                <a asp-action="Details"
-                                   asp-route-id="@plant.Id"
-                                   class="btn btn-outline-success btn-sm">
-                                    View
-                                </a>
-
-                                <a asp-action="Edit"
-                                   asp-route-id="@plant.Id"
-                                   class="btn btn-outline-primary btn-sm">
-                                    Edit
-                                </a>
-
-                                <a asp-action="Delete"
-                                   asp-route-id="@plant.Id"
-                                   class="btn btn-outline-danger btn-sm">
-                                    Delete
-                                </a>
+                                @if (!string.IsNullOrEmpty(plant.SunlightRequirement))
+                                {
+                                    <div>☀️ @plant.SunlightRequirement</div>
+                                }
 
                             </div>
 
+                            <a asp-action="Details"
+                               asp-route-id="@plant.Id"
+                               class="btn btn-outline-success w-100">
+                                View Plant
+                            </a>
+
                         </div>
+
                     </div>
 
                 </div>
