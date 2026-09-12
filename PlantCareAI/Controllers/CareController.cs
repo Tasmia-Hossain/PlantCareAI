@@ -180,8 +180,7 @@ namespace PlantCareAI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddHealth(
-            HealthRecord record)
+        public async Task<IActionResult> AddHealth(HealthRecord record)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
@@ -195,14 +194,23 @@ namespace PlantCareAI.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.HealthRecords.Add(record);
+                var newRecord = new HealthRecord
+                {
+                    PlantId = plant.Id,
+                    RecordedAt = record.RecordedAt,
+                    HealthStatus = record.HealthStatus,
+                    Symptoms = record.Symptoms,
+                    Notes = record.Notes
+                };
+
+                _context.HealthRecords.Add(newRecord);
 
                 await _context.SaveChangesAsync();
 
                 return RedirectToAction(
                     "Details",
                     "Plants",
-                    new { id = record.PlantId });
+                    new { id = plant.Id });
             }
 
             ViewBag.PlantName = plant.Name;

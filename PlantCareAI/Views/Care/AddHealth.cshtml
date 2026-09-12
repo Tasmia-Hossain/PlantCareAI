@@ -32,12 +32,11 @@
                         <div class="mb-3">
 
                             <label asp-for="RecordedAt"
-                                   class="form-label">
-                                Date
+                                   class="form-label fw-semibold">
                             </label>
 
                             <input asp-for="RecordedAt"
-                                   type="date"
+                                   type="datetime-local"
                                    class="form-control" />
 
                         </div>
@@ -46,33 +45,23 @@
                         <div class="mb-3">
 
                             <label asp-for="HealthStatus"
-                                   class="form-label">
-                                Health Status
+                                   class="form-label fw-semibold">
                             </label>
 
                             <select asp-for="HealthStatus"
                                     class="form-select">
 
-                                <option value="">
-                                    Select status
-                                </option>
-
-                                <option value="Healthy">
-                                    Healthy
-                                </option>
-
-                                <option value="Needs Attention">
-                                    Needs Attention
-                                </option>
-
-                                <option value="Critical">
-                                    Critical
-                                </option>
+                                <option value="">Select health status</option>
+                                <option value="Healthy">Healthy</option>
+                                <option value="Needs Attention">Needs Attention</option>
+                                <option value="Recovering">Recovering</option>
+                                <option value="Critical">Critical</option>
 
                             </select>
 
                             <span asp-validation-for="HealthStatus"
-                                  class="text-danger"></span>
+                                  class="text-danger">
+                            </span>
 
                         </div>
 
@@ -80,31 +69,29 @@
                         <div class="mb-3">
 
                             <label asp-for="Symptoms"
-                                   class="form-label">
-                                Symptoms
+                                   class="form-label fw-semibold">
                             </label>
 
                             <textarea asp-for="Symptoms"
                                       class="form-control"
                                       rows="4"
-                                      placeholder="Yellow leaves, drooping, spots, etc."></textarea>
-
-                            <span asp-validation-for="Symptoms"
-                                  class="text-danger"></span>
+                                      placeholder="Describe any visible symptoms...">
+                            </textarea>
 
                         </div>
 
 
-                        <div class="mb-4">
+                        <div class="mb-3">
 
                             <label asp-for="Notes"
-                                   class="form-label">
-                                Notes
+                                   class="form-label fw-semibold">
                             </label>
 
                             <textarea asp-for="Notes"
                                       class="form-control"
-                                      rows="4"></textarea>
+                                      rows="4"
+                                      placeholder="Additional observations...">
+                            </textarea>
 
                         </div>
 
