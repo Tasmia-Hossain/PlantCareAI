@@ -42,7 +42,9 @@ namespace PlantCareAI.Controllers
                 .Include(p => p.FertilizingRecords)
                 .Include(p => p.HealthRecords)
                 .Include(p => p.JournalEntries)
-                .FirstOrDefaultAsync(p => p.Id == id && p.UserId == userId);
+                .FirstOrDefaultAsync(
+                    p => p.Id == id &&
+                         p.UserId == userId);
 
             if (plant == null)
                 return NotFound();
