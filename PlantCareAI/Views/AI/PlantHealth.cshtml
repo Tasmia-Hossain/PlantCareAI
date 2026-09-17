@@ -1,0 +1,182 @@
+﻿@model PlantCareAI.Models.AiPlantAnalysisViewModel
+
+@{
+    ViewData["Title"] = "AI Plant Health Assistant";
+}
+
+<div class="container py-4">
+
+    <div class="row justify-content-center">
+
+        <div class="col-lg-8">
+
+            <div class="mb-4">
+
+                <h1 class="fw-bold">
+                    🤖 AI Plant Health Assistant
+                </h1>
+
+                <p class="text-muted">
+                    Get AI-generated plant-care suggestions for
+                    <strong>@Model.PlantName</strong>.
+                </p>
+
+            </div>
+
+
+            <div class="card shadow-sm border-0 mb-4">
+
+                <div class="card-body p-4">
+
+                    <form asp-action="PlantHealth" method="post">
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="alert alert-danger"
+                             role="alert">
+                        </div>
+
+                        <input type="hidden"
+                               asp-for="PlantId" />
+
+
+                        <!-- Symptoms -->
+
+                        <div class="mb-4">
+
+                            <label asp-for="Symptoms"
+                                   class="form-label fw-semibold">
+                                Symptoms
+                            </label>
+
+                            <textarea asp-for="Symptoms"
+                                      class="form-control"
+                                      rows="4"
+                                      placeholder="Describe what you notice about the plant..."></textarea>
+
+                            <div class="form-text">
+                                Example: Leaves are turning yellow and the
+                                soil stays wet for several days.
+                            </div>
+
+                            <span asp-validation-for="Symptoms"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Environment -->
+
+                        <div class="mb-4">
+
+                            <label asp-for="Environment"
+                                   class="form-label fw-semibold">
+                                Growing Environment
+                            </label>
+
+                            <textarea asp-for="Environment"
+                                      class="form-control"
+                                      rows="3"
+                                      placeholder="Describe sunlight, location, watering conditions, humidity, etc."></textarea>
+
+                            <div class="form-text">
+                                Example: Indoor, near a window, low sunlight,
+                                watered twice a week.
+                            </div>
+
+                            <span asp-validation-for="Environment"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Additional Notes -->
+
+                        <div class="mb-4">
+
+                            <label asp-for="AdditionalNotes"
+                                   class="form-label fw-semibold">
+                                Additional Notes
+                                <span class="text-muted fw-normal">
+                                    (Optional)
+                                </span>
+                            </label>
+
+                            <textarea asp-for="AdditionalNotes"
+                                      class="form-control"
+                                      rows="3"
+                                      placeholder="Anything else you want the AI to know..."></textarea>
+
+                            <span asp-validation-for="AdditionalNotes"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Buttons -->
+
+                        <div class="d-flex gap-2">
+
+                            <button type="submit"
+                                    class="btn btn-success">
+                                🤖 Analyze Plant
+                            </button>
+
+                            <a asp-controller="Plants"
+                               asp-action="Details"
+                               asp-route-id="@Model.PlantId"
+                               class="btn btn-outline-secondary">
+                                Back to Plant
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+            @if (!string.IsNullOrWhiteSpace(Model.AnalysisResult))
+            {
+                <div class="card shadow-sm border-0">
+
+                    <div class="card-body p-4">
+
+                        <h3 class="fw-bold mb-3">
+                            🌿 AI Analysis
+                        </h3>
+
+                        <div class="ai-analysis">
+
+                            @Html.Raw(Model.AnalysisResult)
+
+                        </div>
+
+                        <hr />
+
+                        <p class="text-muted small mb-0">
+                            AI-generated plant-care guidance is informational
+                            and should not be treated as a professional diagnosis.
+                        </p>
+
+                    </div>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

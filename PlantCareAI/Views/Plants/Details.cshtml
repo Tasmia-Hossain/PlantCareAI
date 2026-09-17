@@ -21,6 +21,13 @@
 
         <div class="d-flex gap-2">
 
+            <a asp-controller="AI"
+               asp-action="PlantHealth"
+               asp-route-plantId="@Model.Id"
+               class="btn btn-success">
+                🤖 AI Health Check
+            </a>
+
             <a asp-action="Edit"
                asp-route-id="@Model.Id"
                class="btn btn-outline-primary">

@@ -14,7 +14,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<GeminiPlantService>();
+builder.Services.AddHttpClient<AiPlantService>();
 
 var app = builder.Build();
 
