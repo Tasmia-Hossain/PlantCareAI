@@ -12,29 +12,36 @@ Built with **ASP.NET Core MVC (.NET 10)**, **Entity Framework Core**, **ASP.NET 
 
 ### 🏠 Landing Page
 
-| Hero Section                                                 | Features / Lower Section                                           |
-| ------------------------------------------------------------ | ------------------------------------------------------------------ |
-| ![Landing Page - Top](docs/screenshots/landing-page-top.png) | ![Landing Page - Bottom](docs/screenshots/landing-page-bottom.png) |
+<p align="center">
+  <img src="docs/screenshots/landing-page-top.png" width="48%" alt="Landing Page - Top">
+  <img src="docs/screenshots/landing-page-bottom.png" width="48%" alt="Landing Page - Bottom">
+</p>
 
 ### 📊 Dashboard
 
-![Dashboard](docs/screenshots/dashboard.png)
+<p align="center">
+  <img src="docs/screenshots/dashboard.png" width="80%" alt="Dashboard">
+</p>
 
 ### 🌿 My Plants & Plant Details
 
-| My Plants                                    | Plant Details                                        |
-| -------------------------------------------- | ---------------------------------------------------- |
-| ![My Plants](docs/screenshots/my-plants.png) | ![Plant Details](docs/screenshots/plant-details.png) |
+<p align="center">
+  <img src="docs/screenshots/my-plants.png" width="48%" alt="My Plants">
+  <img src="docs/screenshots/plant-details.png" width="48%" alt="Plant Details">
+</p>
 
 ### ➕ Add Plant
 
-![Add Plant](docs/screenshots/add-plant.png)
+<p align="center">
+  <img src="docs/screenshots/add-plant.png" width="80%" alt="Add Plant">
+</p>
 
 ### 🤖 AI Plant Health Assistant
 
-| Health Check Form                                                  | AI Analysis Result                                                     |
-| ------------------------------------------------------------------ | ---------------------------------------------------------------------- |
-| ![AI Health Check Form](docs/screenshots/ai-health-check-form.png) | ![AI Health Check Result](docs/screenshots/ai-health-check-result.png) |
+<p align="center">
+  <img src="docs/screenshots/ai-health-check-form.png" width="48%" alt="AI Health Check Form">
+  <img src="docs/screenshots/ai-health-check-result.png" width="48%" alt="AI Health Check Result">
+</p>
 
 ---
 
@@ -472,4 +479,4 @@ PlantCareAI demonstrates practical experience with:
 
 ## 📄 License
 
-This project is created for **personal learning, portfolio, and educational purposes**.
+This project was developed as a **personal portfolio project** to demonstrate practical software development skills.
