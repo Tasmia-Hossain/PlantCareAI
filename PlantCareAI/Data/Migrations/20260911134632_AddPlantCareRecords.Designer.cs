@@ -337,7 +337,7 @@ namespace PlantCareAI.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Species")
+                    b.Property<string>("PlantType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

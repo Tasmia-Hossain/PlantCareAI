@@ -1,40 +1,54 @@
 ﻿@model PlantCareAI.Models.HealthRecord
 
 @{
-    ViewData["Title"] = "Record Plant Health";
+    ViewData["Title"] = "Edit Health Record";
 }
 
-<div class="container py-5">
+<div class="container page-header">
+    <span class="section-eyebrow">Update care record</span>
+
+    <h1 class="fw-bold mt-1">
+        🩺 Edit Health Record
+    </h1>
+
+    <p class="text-muted mb-0">
+        Update health information for
+        <strong>@ViewBag.PlantName</strong>.
+    </p>
+</div>
+
+<div class="container pb-5">
 
     <div class="row justify-content-center">
-        <div class="col-md-8">
+
+        <div class="col-md-7">
 
             <div class="form-card">
+
                 <div class="form-card-accent"></div>
+
                 <div class="card-body p-4 p-md-5">
 
-                    <div class="d-flex align-items-center gap-3 mb-4">
-                        <div class="stat-icon m-0" style="background:#fbeee9; color:#b3392f;">❤️</div>
-                        <div>
-                            <h2 class="fw-bold mb-0">Record Plant Health</h2>
-                            <p class="text-muted mb-0">
-                                Record the current health condition of <strong>@ViewBag.PlantName</strong>
-                            </p>
-                        </div>
-                    </div>
+                    <form asp-action="EditHealth"
+                          method="post">
 
-                    <form asp-action="AddHealth">
-
-                        <div asp-validation-summary="ModelOnly"
-                             class="text-danger mb-3"></div>
+                        <input type="hidden"
+                               asp-for="Id" />
 
                         <input type="hidden"
                                asp-for="PlantId" />
 
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3">
+                        </div>
+
+
+                        <!-- Date & Time -->
                         <div class="mb-3">
 
                             <label asp-for="RecordedAt"
                                    class="form-label">
+                                Date &amp; Time
                             </label>
 
                             <input asp-for="RecordedAt"
@@ -42,25 +56,24 @@
                                    asp-format="{0:yyyy-MM-ddTHH:mm}"
                                    class="form-control" />
 
+                            <span asp-validation-for="RecordedAt"
+                                  class="text-danger">
+                            </span>
+
                         </div>
 
 
+                        <!-- Health Status -->
                         <div class="mb-3">
 
                             <label asp-for="HealthStatus"
                                    class="form-label">
+                                Health Status
                             </label>
 
-                            <select asp-for="HealthStatus"
-                                    class="form-select">
-
-                                <option value="">Select health status</option>
-                                <option value="Healthy">💚 Healthy</option>
-                                <option value="Needs Attention">⚠️ Needs Attention</option>
-                                <option value="Recovering">🌱 Recovering</option>
-                                <option value="Critical">🚨 Critical</option>
-
-                            </select>
+                            <input asp-for="HealthStatus"
+                                   class="form-control"
+                                   placeholder="e.g. Healthy, Needs Attention" />
 
                             <span asp-validation-for="HealthStatus"
                                   class="text-danger">
@@ -69,47 +82,58 @@
                         </div>
 
 
+                        <!-- Symptoms -->
                         <div class="mb-3">
 
                             <label asp-for="Symptoms"
                                    class="form-label">
+                                Symptoms
                             </label>
 
                             <textarea asp-for="Symptoms"
                                       class="form-control"
-                                      rows="4"
-                                      placeholder="Describe any visible symptoms...">
-                            </textarea>
+                                      rows="3"
+                                      placeholder="Describe any symptoms..."></textarea>
+
+                            <span asp-validation-for="Symptoms"
+                                  class="text-danger">
+                            </span>
 
                         </div>
 
 
+                        <!-- Notes -->
                         <div class="mb-4">
 
                             <label asp-for="Notes"
                                    class="form-label">
+                                Notes
                             </label>
 
                             <textarea asp-for="Notes"
                                       class="form-control"
                                       rows="4"
-                                      placeholder="Additional observations...">
-                            </textarea>
+                                      placeholder="Add additional notes..."></textarea>
+
+                            <span asp-validation-for="Notes"
+                                  class="text-danger">
+                            </span>
 
                         </div>
 
 
+                        <!-- Buttons -->
                         <div class="d-flex gap-2">
 
                             <button type="submit"
-                                    class="btn btn-danger btn-lg">
-                                ❤️ Save Health Record
+                                    class="btn btn-success">
+                                💾 Save Changes
                             </button>
 
                             <a asp-controller="Plants"
                                asp-action="Details"
                                asp-route-id="@Model.PlantId"
-                               class="btn btn-outline-secondary btn-lg">
+                               class="btn btn-outline-secondary">
                                 Cancel
                             </a>
 
@@ -129,6 +153,7 @@
 
 @section Scripts {
     @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync(
+            "_ValidationScriptsPartial");
     }
 }

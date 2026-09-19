@@ -1,39 +1,54 @@
 ﻿@model PlantCareAI.Models.WateringRecord
 
 @{
-    ViewData["Title"] = "Add Watering Record";
+    ViewData["Title"] = "Edit Watering Record";
 }
 
-<div class="container py-5">
+<div class="container page-header">
+    <span class="section-eyebrow">Update care record</span>
+
+    <h1 class="fw-bold mt-1">
+        💧 Edit Watering Record
+    </h1>
+
+    <p class="text-muted mb-0">
+        Update watering information for
+        <strong>@ViewBag.PlantName</strong>.
+    </p>
+</div>
+
+<div class="container pb-5">
 
     <div class="row justify-content-center">
+
         <div class="col-md-7">
 
             <div class="form-card">
+
                 <div class="form-card-accent"></div>
+
                 <div class="card-body p-4 p-md-5">
 
-                    <div class="d-flex align-items-center gap-3 mb-4">
-                        <div class="stat-icon m-0" style="background:#e0edfb; color:#2f6fb0;">💧</div>
-                        <div>
-                            <h2 class="fw-bold mb-0">Add Watering Record</h2>
-                            <p class="text-muted mb-0">
-                                Record watering for <strong>@ViewBag.PlantName</strong>
-                            </p>
-                        </div>
-                    </div>
+                    <form asp-action="EditWatering"
+                          method="post">
 
-                    <form asp-action="AddWatering" method="post">
+                        <input type="hidden"
+                               asp-for="Id" />
+
+                        <input type="hidden"
+                               asp-for="PlantId" />
 
                         <div asp-validation-summary="ModelOnly"
                              class="text-danger mb-3">
                         </div>
 
-                        <input type="hidden" asp-for="PlantId" />
 
+                        <!-- Date & Time -->
                         <div class="mb-3">
+
                             <label asp-for="WateredAt"
                                    class="form-label">
+                                Date &amp; Time
                             </label>
 
                             <input asp-for="WateredAt"
@@ -44,35 +59,42 @@
                             <span asp-validation-for="WateredAt"
                                   class="text-danger">
                             </span>
+
                         </div>
 
+
+                        <!-- Notes -->
                         <div class="mb-4">
+
                             <label asp-for="Notes"
                                    class="form-label">
+                                Notes
                             </label>
 
                             <textarea asp-for="Notes"
                                       class="form-control"
                                       rows="4"
-                                      placeholder="Optional watering notes...">
-                            </textarea>
+                                      placeholder="Add any notes about watering..."></textarea>
 
                             <span asp-validation-for="Notes"
                                   class="text-danger">
                             </span>
+
                         </div>
 
+
+                        <!-- Buttons -->
                         <div class="d-flex gap-2">
 
                             <button type="submit"
-                                    class="btn btn-success btn-lg">
-                                💧 Save Watering Record
+                                    class="btn btn-success">
+                                💾 Save Changes
                             </button>
 
                             <a asp-controller="Plants"
                                asp-action="Details"
                                asp-route-id="@Model.PlantId"
-                               class="btn btn-outline-secondary btn-lg">
+                               class="btn btn-outline-secondary">
                                 Cancel
                             </a>
 
@@ -81,15 +103,18 @@
                     </form>
 
                 </div>
+
             </div>
 
         </div>
+
     </div>
 
 </div>
 
 @section Scripts {
     @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync(
+            "_ValidationScriptsPartial");
     }
 }

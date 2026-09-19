@@ -1,90 +1,67 @@
 @model PlantCareAI.Models.Plant
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete Plant";
 }
 
-<h1>Delete</h1>
+<div class="container py-5">
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>PlantCareAI.Models.Plant</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Species)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Species)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Location)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Location)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.SunlightRequirement)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.SunlightRequirement)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.WateringFrequency)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.WateringFrequency)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DateAdded)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DateAdded)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImageUrl)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImageUrl)
-        </dd>
-    </dl>
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserId)
-        </dd>
-    </dl>
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+
+            <div class="card border-0 shadow-soft rounded-xl overflow-hidden">
+
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl" alt="@Model.Name" style="height:220px; width:100%; object-fit:cover;" />
+                }
+
+                <div class="card-body p-4 p-md-5">
+
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <div class="empty-icon" style="width:56px; height:56px; margin:0; background:#fbeee9; font-size:1.6rem;">🗑️</div>
+                        <div>
+                            <h2 class="fw-bold mb-0">Remove @Model.Name?</h2>
+                            <p class="text-muted mb-0">This will permanently delete this plant and all of its care history.</p>
+                        </div>
+                    </div>
+
+                    <div class="rounded-3 p-3 mb-4" style="background:var(--cream-50);">
+                        <dl class="row mb-0 small">
+                            <dt class="col-sm-4">PlantType</dt>
+                            <dd class="col-sm-8">@(string.IsNullOrEmpty(Model.PlantType) ? "—" : Model.PlantType)</dd>
+
+                            <dt class="col-sm-4">Location</dt>
+                            <dd class="col-sm-8">@(Model.Location ?? "—")</dd>
+
+                            <dt class="col-sm-4">Added</dt>
+                            <dd class="col-sm-8">@Model.DateAdded.ToString("dd MMM yyyy")</dd>
+
+                            <dt class="col-sm-4">Watering logs</dt>
+                            <dd class="col-sm-8">@Model.WateringRecords.Count</dd>
+
+                            <dt class="col-sm-4">Journal entries</dt>
+                            <dd class="col-sm-8">@Model.JournalEntries.Count</dd>
+                        </dl>
+                    </div>
+
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-danger btn-lg">
+                                Yes, Delete Permanently
+                            </button>
+                            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-secondary btn-lg">
+                                Cancel
+                            </a>
+                        </div>
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
 </div>

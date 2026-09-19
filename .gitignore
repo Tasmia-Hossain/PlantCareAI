@@ -480,3 +480,9 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Runtime-uploaded plant images
+PlantCareAI/wwwroot/uploads/
+
+# Accidental local file
+tatus

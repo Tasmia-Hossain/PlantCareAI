@@ -4,31 +4,27 @@
     ViewData["Title"] = "AI Plant Health Assistant";
 }
 
-<div class="container py-4">
+<div class="container py-5">
 
     <div class="row justify-content-center">
 
         <div class="col-lg-8">
 
             <div class="mb-4">
-
-                <h1 class="fw-bold">
-                    🤖 AI Plant Health Assistant
-                </h1>
-
+                <span class="section-eyebrow">AI-powered</span>
+                <h1 class="fw-bold mt-1">🤖 AI Plant Health Assistant</h1>
                 <p class="text-muted">
                     Get AI-generated plant-care suggestions for
                     <strong>@Model.PlantName</strong>.
                 </p>
-
             </div>
 
+            <div class="form-card mb-4">
+                <div class="form-card-accent"></div>
 
-            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body p-4 p-md-5">
 
-                <div class="card-body p-4">
-
-                    <form asp-action="PlantHealth" method="post">
+                    <form asp-action="PlantHealth" method="post" id="ai-form">
 
                         <div asp-validation-summary="ModelOnly"
                              class="alert alert-danger"
@@ -37,6 +33,8 @@
 
                         <input type="hidden"
                                asp-for="PlantId" />
+                        <input type="hidden"
+                               asp-for="PlantName" />
 
 
                         <!-- Symptoms -->
@@ -44,7 +42,7 @@
                         <div class="mb-4">
 
                             <label asp-for="Symptoms"
-                                   class="form-label fw-semibold">
+                                   class="form-label">
                                 Symptoms
                             </label>
 
@@ -70,7 +68,7 @@
                         <div class="mb-4">
 
                             <label asp-for="Environment"
-                                   class="form-label fw-semibold">
+                                   class="form-label">
                                 Growing Environment
                             </label>
 
@@ -96,7 +94,7 @@
                         <div class="mb-4">
 
                             <label asp-for="AdditionalNotes"
-                                   class="form-label fw-semibold">
+                                   class="form-label">
                                 Additional Notes
                                 <span class="text-muted fw-normal">
                                     (Optional)
@@ -119,15 +117,14 @@
 
                         <div class="d-flex gap-2">
 
-                            <button type="submit"
-                                    class="btn btn-success">
+                            <button type="submit" id="ai-submit-btn" class="btn btn-success btn-lg">
                                 🤖 Analyze Plant
                             </button>
 
                             <a asp-controller="Plants"
                                asp-action="Details"
                                asp-route-id="@Model.PlantId"
-                               class="btn btn-outline-secondary">
+                               class="btn btn-outline-secondary btn-lg">
                                 Back to Plant
                             </a>
 
@@ -142,15 +139,16 @@
 
             @if (!string.IsNullOrWhiteSpace(Model.AnalysisResult))
             {
-                <div class="card shadow-sm border-0">
+                <div class="card shadow-sm border-0 rounded-xl">
 
-                    <div class="card-body p-4">
+                    <div class="card-body p-4 p-md-5">
 
-                        <h3 class="fw-bold mb-3">
-                            🌿 AI Analysis
-                        </h3>
+                        <div class="d-flex align-items-center gap-2 mb-3">
+                            <span class="fs-4">🌿</span>
+                            <h3 class="fw-bold mb-0">AI Analysis</h3>
+                        </div>
 
-                        <div class="ai-analysis">
+                        <div class="ai-result">
 
                             @Html.Raw(Model.AnalysisResult)
 
@@ -174,9 +172,22 @@
 
 </div>
 
-
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        (function () {
+            const form = document.getElementById('ai-form');
+            const btn = document.getElementById('ai-submit-btn');
+            if (form && btn) {
+                form.addEventListener('submit', function () {
+                    if (form.checkValidity()) {
+                        btn.disabled = true;
+                        btn.innerHTML = '🌱 Analyzing your plant...';
+                    }
+                });
+            }
+        })();
+    </script>
 }

@@ -1,0 +1,139 @@
+﻿@model PlantCareAI.Models.JournalEntry
+
+@{
+    ViewData["Title"] = "Edit Journal Entry";
+}
+
+<div class="container page-header">
+    <span class="section-eyebrow">Update journal</span>
+
+    <h1 class="fw-bold mt-1">
+        📔 Edit Journal Entry
+    </h1>
+
+    <p class="text-muted mb-0">
+        Update your journal entry for
+        <strong>@ViewBag.PlantName</strong>.
+    </p>
+</div>
+
+<div class="container pb-5">
+
+    <div class="row justify-content-center">
+
+        <div class="col-md-8">
+
+            <div class="form-card">
+
+                <div class="form-card-accent"></div>
+
+                <div class="card-body p-4 p-md-5">
+
+                    <form asp-action="EditJournal"
+                          method="post">
+
+                        <input type="hidden"
+                               asp-for="Id" />
+
+                        <input type="hidden"
+                               asp-for="PlantId" />
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3">
+                        </div>
+
+
+                        <!-- Date & Time -->
+                        <div class="mb-3">
+
+                            <label asp-for="CreatedAt"
+                                   class="form-label">
+                                Date &amp; Time
+                            </label>
+
+                            <input asp-for="CreatedAt"
+                                   type="datetime-local"
+                                   asp-format="{0:yyyy-MM-ddTHH:mm}"
+                                   class="form-control" />
+
+                            <span asp-validation-for="CreatedAt"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Title -->
+                        <div class="mb-3">
+
+                            <label asp-for="Title"
+                                   class="form-label">
+                                Title
+                            </label>
+
+                            <input asp-for="Title"
+                                   class="form-control"
+                                   placeholder="e.g. New leaves appeared" />
+
+                            <span asp-validation-for="Title"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Content -->
+                        <div class="mb-4">
+
+                            <label asp-for="Content"
+                                   class="form-label">
+                                Journal Entry
+                            </label>
+
+                            <textarea asp-for="Content"
+                                      class="form-control"
+                                      rows="7"
+                                      placeholder="Write about your plant..."></textarea>
+
+                            <span asp-validation-for="Content"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Buttons -->
+                        <div class="d-flex gap-2">
+
+                            <button type="submit"
+                                    class="btn btn-success">
+                                💾 Save Changes
+                            </button>
+
+                            <a asp-controller="Plants"
+                               asp-action="Details"
+                               asp-route-id="@Model.PlantId"
+                               class="btn btn-outline-secondary">
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync(
+            "_ValidationScriptsPartial");
+    }
+}

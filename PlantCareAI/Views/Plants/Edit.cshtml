@@ -1,84 +1,461 @@
 @model PlantCareAI.Models.Plant
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Plant";
 }
 
-<h1>Edit</h1>
+<div class="container page-header">
+    <span class="section-eyebrow">Update details</span>
 
-<h4>Plant</h4>
-<hr />
+    <h1 class="fw-bold mt-1">
+        ✏️ Edit @Model.Name
+    </h1>
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <p class="text-muted mb-0">
+        Keep your plant's profile up to date.
+    </p>
+</div>
 
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="container pb-5">
 
-            <input type="hidden" asp-for="Id" />
+    <div class="row g-4">
 
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+        <!-- =========================
+             Edit Form
+        ========================== -->
+        <div class="col-lg-7">
+
+            <div class="form-card">
+
+                <div class="form-card-accent"></div>
+
+                <div class="card-body p-4 p-md-5">
+
+                    <form asp-action="Edit"
+                          method="post"
+                          enctype="multipart/form-data"
+                          autocomplete="off">
+
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3">
+                        </div>
+
+                        <input type="hidden"
+                               asp-for="Id" />
+
+                        <input type="hidden"
+                               asp-for="UserId" />
+
+
+                        <!-- Plant Name -->
+                        <div class="mb-3">
+
+                            <label asp-for="Name"
+                                   class="form-label">
+                                Plant Name
+                            </label>
+
+                            <input asp-for="Name"
+                                   class="form-control"
+                                   autocomplete="off"
+                                   placeholder="e.g. Money Plant" />
+
+                            <span asp-validation-for="Name"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Plant Type -->
+                        <div class="mb-3">
+
+                            <label asp-for="PlantType"
+                                   class="form-label">
+                                Plant Type
+                                <span class="text-muted fw-normal">
+                                    (Optional)
+                                </span>
+                            </label>
+
+                            <input asp-for="PlantType"
+                                   class="form-control"
+                                   autocomplete="off"
+                                   placeholder="e.g. Indoor plant, Succulent, Herb" />
+
+                            <span asp-validation-for="PlantType"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Description -->
+                        <div class="mb-3">
+
+                            <label asp-for="Description"
+                                   class="form-label">
+                                Description
+                            </label>
+
+                            <textarea asp-for="Description"
+                                      class="form-control"
+                                      rows="4"
+                                      autocomplete="off"
+                                      placeholder="Tell us about your plant..."></textarea>
+
+                            <span asp-validation-for="Description"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Location + Sunlight -->
+                        <div class="row">
+
+                            <div class="col-sm-6 mb-3">
+
+                                <label asp-for="Location"
+                                       class="form-label">
+                                    Location
+                                </label>
+
+                                <input asp-for="Location"
+                                       class="form-control"
+                                       list="location-options"
+                                       autocomplete="off"
+                                       placeholder="e.g. Bedroom" />
+
+                                <datalist id="location-options">
+                                    <option value="Living Room"></option>
+                                    <option value="Bedroom"></option>
+                                    <option value="Kitchen"></option>
+                                    <option value="Balcony"></option>
+                                    <option value="Office Desk"></option>
+                                    <option value="Bathroom"></option>
+                                </datalist>
+
+                                <span asp-validation-for="Location"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+
+                            <div class="col-sm-6 mb-3">
+
+                                <label asp-for="SunlightRequirement"
+                                       class="form-label">
+                                    Sunlight Requirement
+                                </label>
+
+                                <input asp-for="SunlightRequirement"
+                                       class="form-control"
+                                       list="sunlight-options"
+                                       autocomplete="off"
+                                       placeholder="e.g. Indirect sunlight" />
+
+                                <datalist id="sunlight-options">
+                                    <option value="Full Sun"></option>
+                                    <option value="Bright Indirect Light"></option>
+                                    <option value="Partial Shade"></option>
+                                    <option value="Low Light"></option>
+                                </datalist>
+
+                                <span asp-validation-for="SunlightRequirement"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Watering + Date -->
+                        <div class="row">
+
+                            <div class="col-sm-6 mb-3">
+
+                                <label asp-for="WateringFrequency"
+                                       class="form-label">
+                                    Watering Frequency
+                                </label>
+
+                                <input asp-for="WateringFrequency"
+                                       class="form-control"
+                                       list="watering-options"
+                                       autocomplete="off"
+                                       placeholder="e.g. Twice a week" />
+
+                                <datalist id="watering-options">
+                                    <option value="Every day"></option>
+                                    <option value="Twice a week"></option>
+                                    <option value="Once a week"></option>
+                                    <option value="Every 2 weeks"></option>
+                                    <option value="Monthly"></option>
+                                </datalist>
+
+                                <span asp-validation-for="WateringFrequency"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+
+                            <div class="col-sm-6 mb-3">
+
+                                <label asp-for="DateAdded"
+                                       class="form-label">
+                                    Date Added
+                                </label>
+
+                                <input asp-for="DateAdded"
+                                       type="date"
+                                       class="form-control" />
+
+                                <span asp-validation-for="DateAdded"
+                                      class="text-danger">
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Plant Photo -->
+                        <div class="mb-4">
+
+                            <label for="imageFile"
+                                   class="form-label">
+                                Plant Photo
+                                <span class="text-muted fw-normal">
+                                    (Optional)
+                                </span>
+                            </label>
+
+                            <input type="file"
+                                   id="imageFile"
+                                   name="imageFile"
+                                   class="form-control"
+                                   accept=".jpg,.jpeg,.png,.webp" />
+
+                            <div class="form-text">
+                                Select a new photo only if you want to replace
+                                the current one.
+                                JPG, PNG, or WEBP. Maximum file size: 5 MB.
+                            </div>
+
+                            <span asp-validation-for="ImageUrl"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Buttons -->
+                        <div class="d-flex gap-2">
+
+                            <button type="submit"
+                                    class="btn btn-success btn-lg">
+                                💾 Save Changes
+                            </button>
+
+                            <a asp-action="Details"
+                               asp-route-id="@Model.Id"
+                               class="btn btn-outline-secondary btn-lg">
+                                Cancel
+                            </a>
+
+                        </div>
+
+                    </form>
+
+                </div>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Species" class="control-label"></label>
-                <input asp-for="Species" class="form-control" />
-                <span asp-validation-for="Species" class="text-danger"></span>
+        </div>
+
+
+        <!-- =========================
+             Image Preview
+        ========================== -->
+        <div class="col-lg-5">
+
+            <div class="card shadow-sm border-0 h-100">
+
+                <div class="card-body p-4 d-flex flex-column">
+
+                    <h6 class="fw-bold mb-3 text-muted text-uppercase"
+                        style="font-size:.8rem; letter-spacing:.05em;">
+                        Photo Preview
+                    </h6>
+
+
+                    <div class="flex-grow-1 d-flex align-items-center justify-content-center rounded-xl overflow-hidden"
+                         style="min-height:260px; background:linear-gradient(135deg, var(--sage-100), var(--sage-200));">
+
+                        <!-- Existing / New Image -->
+                        <img id="image-preview"
+                             src="@Model.ImageUrl"
+                             alt="@Model.Name"
+                             style="@(string.IsNullOrWhiteSpace(Model.ImageUrl)
+                                 ? "display:none; width:100%; height:100%; object-fit:cover;"
+                                 : "display:block; width:100%; height:100%; object-fit:cover;")" />
+
+
+                        <!-- Placeholder -->
+                        <span id="image-preview-placeholder"
+                              style="@(string.IsNullOrWhiteSpace(Model.ImageUrl)
+                                  ? "font-size:3rem;"
+                                  : "display:none; font-size:3rem;")">
+                            🌿
+                        </span>
+
+                    </div>
+
+
+                    <p class="text-muted small mt-3 mb-0">
+                        Choose a new photo to replace the current plant photo.
+                        If you do not select one, the existing photo will remain unchanged.
+                    </p>
+
+                </div>
+
             </div>
 
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
+        </div>
 
-            <div class="form-group">
-                <label asp-for="Location" class="control-label"></label>
-                <input asp-for="Location" class="form-control" />
-                <span asp-validation-for="Location" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="SunlightRequirement" class="control-label"></label>
-                <input asp-for="SunlightRequirement" class="form-control" />
-                <span asp-validation-for="SunlightRequirement" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="WateringFrequency" class="control-label"></label>
-                <input asp-for="WateringFrequency" class="form-control" />
-                <span asp-validation-for="WateringFrequency" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="DateAdded" class="control-label"></label>
-                <input asp-for="DateAdded" class="form-control" />
-                <span asp-validation-for="DateAdded" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ImageUrl" class="control-label"></label>
-                <input asp-for="ImageUrl" class="form-control" />
-                <span asp-validation-for="ImageUrl" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-
-        </form>
     </div>
+
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
+
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+
+    <script>
+
+        (function () {
+
+            const input =
+                document.getElementById('imageFile');
+
+            const preview =
+                document.getElementById('image-preview');
+
+            const placeholder =
+                document.getElementById('image-preview-placeholder');
+
+
+            if (!input || !preview || !placeholder) {
+                return;
+            }
+
+
+            input.addEventListener('change', function () {
+
+                const file = input.files[0];
+
+
+                // No new file selected
+                if (!file) {
+
+                    // Keep existing image if one exists
+                    if (preview.src &&
+                        preview.getAttribute('src')) {
+
+                        preview.style.display = 'block';
+                        placeholder.style.display = 'none';
+
+                    }
+                    else {
+
+                        preview.style.display = 'none';
+                        placeholder.style.display = 'block';
+
+                    }
+
+                    return;
+                }
+
+
+                // Allowed image types
+                const allowedTypes = [
+                    'image/jpeg',
+                    'image/png',
+                    'image/webp'
+                ];
+
+
+                if (!allowedTypes.includes(file.type)) {
+
+                    alert(
+                        'Please select a JPG, PNG, or WEBP image.'
+                    );
+
+                    input.value = '';
+
+                    return;
+                }
+
+
+                // Maximum 5 MB
+                const maxSize =
+                    5 * 1024 * 1024;
+
+
+                if (file.size > maxSize) {
+
+                    alert(
+                        'Image size must be 5 MB or less.'
+                    );
+
+                    input.value = '';
+
+                    return;
+                }
+
+
+                // Show selected image immediately
+                const reader =
+                    new FileReader();
+
+
+                reader.onload = function (e) {
+
+                    preview.src =
+                        e.target.result;
+
+                    preview.style.display =
+                        'block';
+
+                    placeholder.style.display =
+                        'none';
+                };
+
+
+                reader.readAsDataURL(file);
+
+            });
+
+
+            // If existing image cannot be loaded
+            preview.addEventListener('error', function () {
+
+                preview.style.display =
+                    'none';
+
+                placeholder.style.display =
+                    'block';
+
+            });
+
+        })();
+
+    </script>
 }

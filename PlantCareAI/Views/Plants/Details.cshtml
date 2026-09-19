@@ -2,24 +2,59 @@
 
 @{
     ViewData["Title"] = Model.Name;
+
+
+    var latestHealth = Model.HealthRecords
+        .OrderByDescending(h => h.RecordedAt)
+        .FirstOrDefault();
+
+    var status = latestHealth?.HealthStatus;
+
+    var badgeClass = status switch
+    {
+        "Healthy" => "healthy",
+        "Needs Attention" => "attention",
+        "Recovering" => "recovering",
+        "Critical" => "critical",
+        _ => "unknown"
+    };
+
+    var badgeIcon = status switch
+    {
+        "Healthy" => "💚",
+        "Needs Attention" => "⚠️",
+        "Recovering" => "🌱",
+        "Critical" => "🚨",
+        _ => "🌿"
+    };
+
+
 }
 
 <div class="container py-4">
 
     <!-- Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
 
         <div>
-            <h1 class="fw-bold mb-1">
-                🌿 @Model.Name
-            </h1>
+            <div class="d-flex align-items-center gap-2 mb-1">
+
+                <h1 class="fw-bold mb-0">
+                    🌿 @Model.Name
+                </h1>
+
+                <span class="badge-status @badgeClass">
+                    @badgeIcon @(status ?? "Unrecorded")
+                </span>
+
+            </div>
 
             <p class="text-muted fst-italic mb-0">
-                @Model.Species
+                @Model.PlantType
             </p>
         </div>
 
-        <div class="d-flex gap-2">
+        <div class="d-flex flex-wrap gap-2">
 
             <a asp-controller="AI"
                asp-action="PlantHealth"
@@ -34,6 +69,12 @@
                 Edit
             </a>
 
+            <a asp-action="Delete"
+               asp-route-id="@Model.Id"
+               class="btn btn-outline-danger">
+                Delete
+            </a>
+
             <a asp-action="Index"
                class="btn btn-outline-secondary">
                 Back
@@ -45,10 +86,11 @@
 
 
     <!-- Plant Overview -->
-    <div class="card shadow-sm border-0 mb-4">
+    <div class="card shadow-sm border-0 mb-4 rounded-xl overflow-hidden">
 
         <div class="row g-0">
 
+            <!-- Plant Image -->
             <div class="col-md-5">
 
                 @if (!string.IsNullOrEmpty(Model.ImageUrl))
@@ -56,20 +98,20 @@
                     <img src="@Model.ImageUrl"
                          alt="@Model.Name"
                          class="img-fluid w-100 h-100"
-                         style="object-fit:cover; min-height:320px;" />
+                         style="object-fit: cover; min-height: 320px;" />
                 }
                 else
                 {
-                    <div class="bg-light d-flex align-items-center justify-content-center"
-                         style="height:320px;">
-                        <span class="text-muted">
-                            No image available
-                        </span>
+                    <div class="plant-img-placeholder d-flex align-items-center justify-content-center"
+                         style="height: 320px; font-size: 3rem;">
+                        🌿
                     </div>
                 }
 
             </div>
 
+
+            <!-- Plant Information -->
             <div class="col-md-7">
 
                 <div class="card-body p-4">
@@ -88,31 +130,43 @@
                     <div class="row g-3">
 
                         <div class="col-sm-6">
-                            <strong>Location</strong>
+
+                            <strong>📍 Location</strong>
+
                             <div class="text-muted">
                                 @(Model.Location ?? "Not specified")
                             </div>
+
                         </div>
 
                         <div class="col-sm-6">
-                            <strong>Sunlight</strong>
+
+                            <strong>☀️ Sunlight</strong>
+
                             <div class="text-muted">
                                 @(Model.SunlightRequirement ?? "Not specified")
                             </div>
+
                         </div>
 
                         <div class="col-sm-6">
-                            <strong>Watering</strong>
+
+                            <strong>💧 Watering</strong>
+
                             <div class="text-muted">
                                 @(Model.WateringFrequency ?? "Not specified")
                             </div>
+
                         </div>
 
                         <div class="col-sm-6">
-                            <strong>Added</strong>
+
+                            <strong>📅 Added</strong>
+
                             <div class="text-muted">
                                 @Model.DateAdded.ToString("dd MMM yyyy")
                             </div>
+
                         </div>
 
                     </div>
@@ -130,7 +184,10 @@
     <div class="row g-4">
 
 
-        <!-- Watering -->
+        <!-- ================================================= -->
+        <!-- WATERING -->
+        <!-- ================================================= -->
+
         <div class="col-md-6">
 
             <div class="card shadow-sm border-0 h-100">
@@ -156,18 +213,21 @@
                     {
                         <p class="text-muted">
                             Last watered:
+
                             <strong>
                                 @(Model.WateringRecords
                                     .OrderByDescending(x => x.WateredAt)
                                     .First()
                                     .WateredAt
-                                    .ToString("dd MMM yyyy"))
+                                    .ToString("dd MMM yyyy, hh:mm tt"))
                             </strong>
                         </p>
 
                         <hr />
 
-                        <h6>Recent Records</h6>
+                        <h6 class="mb-3">
+                            Recent Records
+                        </h6>
 
                         <ul class="list-group list-group-flush">
 
@@ -175,15 +235,56 @@
                                 .OrderByDescending(x => x.WateredAt)
                                 .Take(5))
                             {
-                                <li class="list-group-item px-0">
-                                    @record.WateredAt.ToString("dd MMM yyyy")
+                                <li class="list-group-item px-0 bg-transparent">
 
-                                    @if (!string.IsNullOrEmpty(record.Notes))
-                                    {
-                                        <span class="text-muted">
-                                            — @record.Notes
-                                        </span>
-                                    }
+                                    <div class="d-flex justify-content-between align-items-start gap-2">
+
+                                        <div>
+
+                                            <div>
+                                                @record.WateredAt.ToString("dd MMM yyyy, hh:mm tt")
+                                            </div>
+
+                                            @if (!string.IsNullOrEmpty(record.Notes))
+                                            {
+                                                <small class="text-muted">
+                                                    Notes: @record.Notes
+                                                </small>
+                                            }
+
+                                        </div>
+
+                                        <div class="d-flex gap-1 flex-shrink-0">
+
+                                            <a asp-controller="Care"
+                                               asp-action="EditWatering"
+                                               asp-route-id="@record.Id"
+                                               class="btn btn-outline-primary btn-sm">
+                                                Edit
+                                            </a>
+
+                                            <form asp-controller="Care"
+                                                  asp-action="DeleteWatering"
+                                                  asp-route-id="@record.Id"
+                                                  method="post"
+                                                  id="delete-watering-@record.Id">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <button type="button"
+                                                        class="btn btn-outline-danger btn-sm"
+                                                        data-confirm-delete
+                                                        data-confirm-target="delete-watering-@record.Id"
+                                                        data-confirm-message="Delete this watering record? This can't be undone.">
+                                                    Delete
+                                                </button>
+
+                                            </form>
+
+                                        </div>
+
+                                    </div>
+
                                 </li>
                             }
 
@@ -191,7 +292,7 @@
                     }
                     else
                     {
-                        <p class="text-muted">
+                        <p class="text-muted mb-0">
                             No watering records yet.
                         </p>
                     }
@@ -203,7 +304,10 @@
         </div>
 
 
-        <!-- Fertilizing -->
+        <!-- ================================================= -->
+        <!-- FERTILIZING -->
+        <!-- ================================================= -->
+
         <div class="col-md-6">
 
             <div class="card shadow-sm border-0 h-100">
@@ -229,16 +333,21 @@
                     {
                         <p class="text-muted">
                             Last fertilized:
+
                             <strong>
                                 @(Model.FertilizingRecords
                                     .OrderByDescending(x => x.FertilizedAt)
                                     .First()
                                     .FertilizedAt
-                                    .ToString("dd MMM yyyy"))
+                                    .ToString("dd MMM yyyy, hh:mm tt"))
                             </strong>
                         </p>
 
                         <hr />
+
+                        <h6 class="mb-3">
+                            Recent Records
+                        </h6>
 
                         <ul class="list-group list-group-flush">
 
@@ -246,18 +355,62 @@
                                 .OrderByDescending(x => x.FertilizedAt)
                                 .Take(5))
                             {
-                                <li class="list-group-item px-0">
+                                <li class="list-group-item px-0 bg-transparent">
 
-                                    <strong>
-                                        @record.FertilizedAt.ToString("dd MMM yyyy")
-                                    </strong>
+                                    <div class="d-flex justify-content-between align-items-start gap-2">
 
-                                    @if (!string.IsNullOrEmpty(record.Fertilizer))
-                                    {
-                                        <span>
-                                            — @record.Fertilizer
-                                        </span>
-                                    }
+                                        <div>
+
+                                            <div>
+                                                @record.FertilizedAt.ToString("dd MMM yyyy, hh:mm tt")
+                                            </div>
+
+                                            @if (!string.IsNullOrEmpty(record.Fertilizer))
+                                            {
+                                                <div>
+                                                    Fertilizer: @record.Fertilizer
+                                                </div>
+                                            }
+
+                                            @if (!string.IsNullOrEmpty(record.Notes))
+                                            {
+                                                <small class="text-muted">
+                                                    Notes: @record.Notes
+                                                </small>
+                                            }
+
+                                        </div>
+
+                                        <div class="d-flex gap-1 flex-shrink-0">
+
+                                            <a asp-controller="Care"
+                                               asp-action="EditFertilizer"
+                                               asp-route-id="@record.Id"
+                                               class="btn btn-outline-primary btn-sm">
+                                                Edit
+                                            </a>
+
+                                            <form asp-controller="Care"
+                                                  asp-action="DeleteFertilizer"
+                                                  asp-route-id="@record.Id"
+                                                  method="post"
+                                                  id="delete-fertilizer-@record.Id">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <button type="button"
+                                                        class="btn btn-outline-danger btn-sm"
+                                                        data-confirm-delete
+                                                        data-confirm-target="delete-fertilizer-@record.Id"
+                                                        data-confirm-message="Delete this fertilizer record? This can't be undone.">
+                                                    Delete
+                                                </button>
+
+                                            </form>
+
+                                        </div>
+
+                                    </div>
 
                                 </li>
                             }
@@ -266,7 +419,7 @@
                     }
                     else
                     {
-                        <p class="text-muted">
+                        <p class="text-muted mb-0">
                             No fertilizing records yet.
                         </p>
                     }
@@ -278,7 +431,10 @@
         </div>
 
 
-        <!-- Health -->
+        <!-- ================================================= -->
+        <!-- HEALTH -->
+        <!-- ================================================= -->
+
         <div class="col-md-6">
 
             <div class="card shadow-sm border-0 h-100">
@@ -300,33 +456,77 @@
 
                     </div>
 
-                    @if (Model.HealthRecords.Any())
+                    @if (latestHealth != null)
                     {
-                        var latestHealth = Model.HealthRecords
-                            .OrderByDescending(x => x.RecordedAt)
-                            .First();
+                        <div class="d-flex justify-content-between align-items-start gap-2">
 
-                        <p>
-                            <strong>Status:</strong>
-                            @latestHealth.HealthStatus
-                        </p>
+                            <div>
 
-                        @if (!string.IsNullOrEmpty(latestHealth.Symptoms))
-                        {
-                            <p>
-                                <strong>Symptoms:</strong>
-                                @latestHealth.Symptoms
-                            </p>
-                        }
+                                <p class="mb-2">
+                                    <strong>Status:</strong>
 
-                        <small class="text-muted">
-                            Recorded
-                            @latestHealth.RecordedAt.ToString("dd MMM yyyy")
-                        </small>
+                                    <span class="badge-status @badgeClass">
+                                        @badgeIcon @latestHealth.HealthStatus
+                                    </span>
+                                </p>
+
+                                @if (!string.IsNullOrEmpty(latestHealth.Symptoms))
+                                {
+                                    <p class="mb-2">
+                                        <strong>Symptoms:</strong>
+                                        @latestHealth.Symptoms
+                                    </p>
+                                }
+
+                                @if (!string.IsNullOrEmpty(latestHealth.Notes))
+                                {
+                                    <p class="mb-2">
+                                        <strong>Notes:</strong>
+                                        @latestHealth.Notes
+                                    </p>
+                                }
+
+                                <small class="text-muted">
+                                    Recorded
+                                    @latestHealth.RecordedAt.ToString("dd MMM yyyy, hh:mm tt")
+                                </small>
+
+                            </div>
+
+                            <div class="d-flex gap-1 flex-shrink-0">
+
+                                <a asp-controller="Care"
+                                   asp-action="EditHealth"
+                                   asp-route-id="@latestHealth.Id"
+                                   class="btn btn-outline-primary btn-sm">
+                                    Edit
+                                </a>
+
+                                <form asp-controller="Care"
+                                      asp-action="DeleteHealth"
+                                      asp-route-id="@latestHealth.Id"
+                                      method="post"
+                                      id="delete-health-@latestHealth.Id">
+
+                                    @Html.AntiForgeryToken()
+
+                                    <button type="button"
+                                            class="btn btn-outline-danger btn-sm"
+                                            data-confirm-delete
+                                            data-confirm-target="delete-health-@latestHealth.Id"
+                                            data-confirm-message="Delete this health record? This can't be undone.">
+                                        Delete
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
                     }
                     else
                     {
-                        <p class="text-muted">
+                        <p class="text-muted mb-0">
                             No health records yet.
                         </p>
                     }
@@ -338,7 +538,10 @@
         </div>
 
 
-        <!-- Journal -->
+        <!-- ================================================= -->
+        <!-- JOURNAL -->
+        <!-- ================================================= -->
+
         <div class="col-md-6">
 
             <div class="card shadow-sm border-0 h-100">
@@ -368,24 +571,61 @@
                         {
                             <div class="border-bottom pb-3 mb-3">
 
-                                <h6 class="fw-bold">
-                                    @entry.Title
-                                </h6>
+                                <div class="d-flex justify-content-between align-items-start gap-2">
 
-                                <p class="mb-1">
-                                    @entry.Content
-                                </p>
+                                    <div class="flex-grow-1">
 
-                                <small class="text-muted">
-                                    @entry.CreatedAt.ToString("dd MMM yyyy")
-                                </small>
+                                        <h6 class="fw-bold mb-1">
+                                            @entry.Title
+                                        </h6>
+
+                                        <p class="mb-1">
+                                            @entry.Content
+                                        </p>
+
+                                        <small class="text-muted">
+                                            @entry.CreatedAt.ToString("dd MMM yyyy, hh:mm tt")
+                                        </small>
+
+                                    </div>
+
+                                    <div class="d-flex gap-1 flex-shrink-0">
+
+                                        <a asp-controller="Care"
+                                           asp-action="EditJournal"
+                                           asp-route-id="@entry.Id"
+                                           class="btn btn-outline-primary btn-sm">
+                                            Edit
+                                        </a>
+
+                                        <form asp-controller="Care"
+                                              asp-action="DeleteJournal"
+                                              asp-route-id="@entry.Id"
+                                              method="post"
+                                              id="delete-journal-@entry.Id">
+
+                                            @Html.AntiForgeryToken()
+
+                                            <button type="button"
+                                                    class="btn btn-outline-danger btn-sm"
+                                                    data-confirm-delete
+                                                    data-confirm-target="delete-journal-@entry.Id"
+                                                    data-confirm-message="Delete this journal entry? This can't be undone.">
+                                                Delete
+                                            </button>
+
+                                        </form>
+
+                                    </div>
+
+                                </div>
 
                             </div>
                         }
                     }
                     else
                     {
-                        <p class="text-muted">
+                        <p class="text-muted mb-0">
                             No journal entries yet.
                         </p>
                     }

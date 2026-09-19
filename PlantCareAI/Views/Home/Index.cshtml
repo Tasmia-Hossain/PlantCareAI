@@ -1,8 +1,226 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "PlantCareAI — Grow with confidence";
+    var isAuthed = User.Identity?.IsAuthenticated ?? false;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!-- ===================== HERO ===================== -->
+<section class="hero-section py-5 py-lg-0">
+    <div class="container position-relative" style="z-index:1;">
+        <div class="row align-items-center py-5">
+            <div class="col-lg-6 pe-lg-5">
+                <span class="hero-eyebrow">🌿 Plant care, simplified</span>
+                <h1 class="mt-3 mb-3">
+                    Give every leaf the attention it deserves.
+                </h1>
+                <p class="lead mb-4">
+                    PlantCareAI keeps your watering schedule, fertilizing routine,
+                    health notes and growth journal in one calm, green home —
+                    with an AI assistant on call whenever a leaf looks off.
+                </p>
+                <div class="d-flex flex-wrap gap-3">
+                    @if (isAuthed)
+                    {
+                        <a asp-controller="Dashboard" asp-action="Index" class="btn btn-success btn-lg">
+                            Go to Your Dashboard
+                        </a>
+                        <a asp-controller="Plants" asp-action="Create" class="btn btn-outline-light btn-lg">
+                            + Add a Plant
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-success btn-lg">
+                            Start Growing — It's Free
+                        </a>
+                        <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-light btn-lg">
+                            I already have an account
+                        </a>
+                    }
+                </div>
+                <div class="d-flex flex-wrap gap-4 mt-5 pt-2">
+                    <div>
+                        <div class="fw-bold fs-4" style="font-family:var(--font-display); color:#fdfbf3;">🌱 Unlimited</div>
+                        <div class="small" style="color:rgba(253,251,243,.7);">plants tracked</div>
+                    </div>
+                    <div>
+                        <div class="fw-bold fs-4" style="font-family:var(--font-display); color:#fdfbf3;">💧 4 care logs</div>
+                        <div class="small" style="color:rgba(253,251,243,.7);">watering, feeding, health, journal</div>
+                    </div>
+                    <div>
+                        <div class="fw-bold fs-4" style="font-family:var(--font-display); color:#fdfbf3;">🤖 AI-backed</div>
+                        <div class="small" style="color:rgba(253,251,243,.7);">health suggestions</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 mt-5 mt-lg-0">
+                <div class="hero-media position-relative mx-auto" style="max-width: 480px;">
+                    <img src="https://images.unsplash.com/photo-1654701381111-387c2b090a2e?auto=format&fit=crop&w=900&q=80"
+                         alt="A lush monstera plant thriving beside a sunlit window" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="leaf-divider"></div>
+
+<!-- ===================== FEATURES ===================== -->
+<section class="container py-5 my-3">
+    <div class="text-center mx-auto mb-5" style="max-width: 640px;">
+        <span class="section-eyebrow">Everything your plants need</span>
+        <h2 class="mt-2 mb-3">One refreshing home for every stem, leaf and root</h2>
+        <p class="text-muted">
+            Built for plant parents who want to actually remember to water —
+            and know why a leaf is turning yellow before it's too late.
+        </p>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-md-6 col-lg-4">
+            <div class="feature-card">
+                <div class="feature-icon">🪴</div>
+                <h5 class="mb-2">Plant Profiles</h5>
+                <p class="text-muted mb-0">
+                    Keep a beautiful profile for every plant — PlantType, location,
+                    sunlight needs and a photo that makes your collection feel real.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="feature-card">
+                <div class="feature-icon">💧</div>
+                <h5 class="mb-2">Watering &amp; Fertilizing Log</h5>
+                <p class="text-muted mb-0">
+                    Never wonder "did I already water this?" again. Every drop and
+                    every feed is logged with dates and notes.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="feature-card">
+                <div class="feature-icon">❤️</div>
+                <h5 class="mb-2">Health Tracking</h5>
+                <p class="text-muted mb-0">
+                    Record symptoms and status over time so you can spot patterns —
+                    from "Healthy" to "Needs Attention" — before things get worse.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="feature-card">
+                <div class="feature-icon">📖</div>
+                <h5 class="mb-2">Growth Journal</h5>
+                <p class="text-muted mb-0">
+                    Capture the small wins — a new leaf unfurling, a first bloom —
+                    in a running journal for every plant.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <h5 class="mb-2">AI Health Assistant</h5>
+                <p class="text-muted mb-0">
+                    Describe the symptoms and environment, and get structured,
+                    practical guidance on possible causes and next steps.
+                </p>
+            </div>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h5 class="mb-2">A Dashboard That Cares</h5>
+                <p class="text-muted mb-0">
+                    See your whole collection at a glance — how many are thriving,
+                    how many need attention, right when you log in.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== GALLERY STRIP ===================== -->
+<section class="container pb-5">
+    <div class="row g-3 gallery-strip">
+        <div class="col-6 col-md-3">
+            <img src="https://images.unsplash.com/photo-1643262201267-9bdda9da5f7b?auto=format&fit=crop&w=500&q=75" alt="Close-up of a glossy green monstera leaf" />
+        </div>
+        <div class="col-6 col-md-3">
+            <img src="https://images.unsplash.com/photo-1767865728862-a12da7ee9eb8?auto=format&fit=crop&w=500&q=75" alt="A succulent in a decorative pot" />
+        </div>
+        <div class="col-6 col-md-3">
+            <img src="https://images.unsplash.com/photo-1725457967247-9f5d3bbee7ab?auto=format&fit=crop&w=500&q=75" alt="Potted plants resting on a sunny windowsill" />
+        </div>
+        <div class="col-6 col-md-3">
+            <img src="https://images.unsplash.com/photo-1654701381111-387c2b090a2e?auto=format&fit=crop&w=500&q=75" alt="A large leafy houseplant by a window" />
+        </div>
+    </div>
+</section>
+
+<!-- ===================== HOW IT WORKS ===================== -->
+<section class="container py-5">
+    <div class="text-center mx-auto mb-5" style="max-width: 600px;">
+        <span class="section-eyebrow">How it works</span>
+        <h2 class="mt-2">Three steps to a happier houseplant</h2>
+    </div>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="d-flex gap-3">
+                <span class="step-number">1</span>
+                <div>
+                    <h5 class="mb-2">Add your plants</h5>
+                    <p class="text-muted mb-0">
+                        Create a profile for each plant with a photo, PlantType and the
+                        care details you already know.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="d-flex gap-3">
+                <span class="step-number">2</span>
+                <div>
+                    <h5 class="mb-2">Log every act of care</h5>
+                    <p class="text-muted mb-0">
+                        Mark waterings, fertilizing and health checks as they happen —
+                        it takes seconds.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="d-flex gap-3">
+                <span class="step-number">3</span>
+                <div>
+                    <h5 class="mb-2">Ask AI when in doubt</h5>
+                    <p class="text-muted mb-0">
+                        Something looks off? Describe it to the AI assistant for
+                        possible causes and next steps.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ===================== CTA ===================== -->
+<section class="container pb-5">
+    <div class="cta-band p-5 text-center">
+        <h2 class="mb-3" style="color:#fdfbf3;">Ready to grow something great?</h2>
+        <p class="mb-4 mx-auto" style="max-width:52ch; color:rgba(253,251,243,.85);">
+            Join PlantCareAI and turn plant care from guesswork into a calm,
+            confident routine.
+        </p>
+        @if (isAuthed)
+        {
+            <a asp-controller="Plants" asp-action="Index" class="btn btn-lg" style="background:#fdfbf3; color: var(--forest-800); border-color:#fdfbf3;">
+                View My Plants
+            </a>
+        }
+        else
+        {
+            <a asp-area="Identity" asp-page="/Account/Register" class="btn btn-lg" style="background:#fdfbf3; color: var(--forest-800); border-color:#fdfbf3;">
+                Create Your Free Account
+            </a>
+        }
+    </div>
+</section>

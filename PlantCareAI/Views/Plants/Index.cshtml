@@ -4,96 +4,131 @@
     ViewData["Title"] = "My Plants";
 }
 
-<div class="container py-4">
-
-    <div class="d-flex justify-content-between align-items-center mb-4">
-
+<div class="container page-header">
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
         <div>
-            <h1 class="fw-bold mb-1">🌿 My Plants</h1>
+            <span class="section-eyebrow">Your collection</span>
+            <h1 class="fw-bold mb-1 mt-1">🌿 My Plants</h1>
             <p class="text-muted mb-0">
-                Keep track of your plants and their care.
+                Keep track of your plants and their care, all in one refreshing place.
             </p>
         </div>
 
-        <a asp-action="Create"
-           class="btn btn-success">
+        <a asp-action="Create" class="btn btn-success btn-lg">
             + Add Plant
         </a>
-
     </div>
+</div>
+
+<div class="container pb-5">
 
     @if (!Model.Any())
     {
-        <div class="card shadow-sm border-0">
-            <div class="card-body text-center py-5">
-
-                <h3>No plants yet 🌱</h3>
-
-                <p class="text-muted">
-                    Add your first plant to start tracking its care.
+        <div class="card border-0 shadow-sm rounded-xl">
+            <div class="empty-state">
+                <div class="empty-icon">🌱</div>
+                <h3>No plants yet</h3>
+                <p class="text-muted mx-auto" style="max-width: 42ch;">
+                    Add your first plant to start tracking its watering, health and
+                    growth journal.
                 </p>
-
-                <a asp-action="Create"
-                   class="btn btn-success">
+                <a asp-action="Create" class="btn btn-success btn-lg mt-2">
                     Add Your First Plant
                 </a>
-
             </div>
         </div>
     }
     else
     {
-        <div class="row g-4">
+        <div class="mb-4" style="max-width: 420px;">
+            <input type="search" id="plant-search" class="form-control form-control-lg"
+                   placeholder="🔍 Search by name or PlantType..." autocomplete="off" />
+        </div>
+
+        <div class="row g-4" id="plant-grid">
 
             @foreach (var plant in Model)
             {
-                <div class="col-md-6 col-lg-4">
+                var status = plant.HealthRecords
+                    .OrderByDescending(h => h.RecordedAt)
+                    .FirstOrDefault()?.HealthStatus;
 
-                    <div class="card shadow-sm border-0 h-100">
+                var badgeClass = status switch
+                {
+                    "Healthy" => "healthy",
+                    "Needs Attention" => "attention",
+                    "Recovering" => "recovering",
+                    "Critical" => "critical",
+                    _ => "unknown"
+                };
 
-                        @if (!string.IsNullOrEmpty(plant.ImageUrl))
-                        {
-                            <img src="@plant.ImageUrl"
-                                 class="card-img-top"
-                                 alt="@plant.Name"
-                                 style="height:220px; object-fit:cover;" />
-                        }
-                        else
-                        {
-                            <div class="bg-light d-flex align-items-center justify-content-center"
-                                 style="height:220px;">
-                                <span class="text-muted">
-                                    No image
-                                </span>
-                            </div>
-                        }
+                var badgeIcon = status switch
+                {
+                    "Healthy" => "💚",
+                    "Needs Attention" => "⚠️",
+                    "Recovering" => "🌱",
+                    "Critical" => "🚨",
+                    _ => "🌿"
+                };
+
+                var lastWatered = plant.WateringRecords
+                    .OrderByDescending(w => w.WateredAt)
+                    .FirstOrDefault();
+
+                <div class="col-md-6 col-lg-4 plant-grid-item"
+                     data-search="@($"{plant.Name} {plant.PlantType}".ToLowerInvariant())">
+
+                    <div class="card plant-card shadow-sm border-0 h-100">
+
+                        <div class="position-relative">
+                            @if (!string.IsNullOrEmpty(plant.ImageUrl))
+                            {
+                                <img src="@plant.ImageUrl"
+                                     class="card-img-top"
+                                     alt="@plant.Name"
+                                     style="height:220px; object-fit:cover;" />
+                            }
+                            else
+                            {
+                                <div class="plant-img-placeholder d-flex align-items-center justify-content-center"
+                                     style="height:220px;">
+                                    🌿
+                                </div>
+                            }
+
+                            <span class="badge-status @badgeClass position-absolute" style="top:12px; right:12px;">
+                                @badgeIcon @(status ?? "Unrecorded")
+                            </span>
+                        </div>
 
                         <div class="card-body">
 
                             <h4 class="fw-bold mb-1">
-                                🌿 @plant.Name
+                                @plant.Name
                             </h4>
 
-                            <p class="text-muted fst-italic">
-                                @plant.Species
+                            <p class="text-muted fst-italic mb-2">
+                                @plant.PlantType
                             </p>
 
-                            <div class="small text-muted mb-3">
+                            <div class="small text-muted mb-3 d-flex flex-column gap-1">
 
                                 @if (!string.IsNullOrEmpty(plant.Location))
                                 {
                                     <div>📍 @plant.Location</div>
                                 }
 
-                                @if (!string.IsNullOrEmpty(plant.WateringFrequency))
-                                {
-                                    <div>💧 @plant.WateringFrequency</div>
-                                }
-
                                 @if (!string.IsNullOrEmpty(plant.SunlightRequirement))
                                 {
                                     <div>☀️ @plant.SunlightRequirement</div>
                                 }
+
+                                <div>
+                                    💧
+                                    @(lastWatered != null
+                                        ? "Watered " + lastWatered.WateredAt.ToString("dd MMM")
+                                        : "Not watered yet")
+                                </div>
 
                             </div>
 
@@ -111,6 +146,36 @@
             }
 
         </div>
+
+        <div id="no-search-results" class="text-center text-muted py-5" style="display:none;">
+            <div class="fs-1 mb-2">🔍🌱</div>
+            No plants match your search.
+        </div>
     }
 
 </div>
+
+@section Scripts {
+    <script>
+        (function () {
+            const search = document.getElementById('plant-search');
+            if (!search) return;
+
+            const items = Array.from(document.querySelectorAll('.plant-grid-item'));
+            const noResults = document.getElementById('no-search-results');
+
+            search.addEventListener('input', function () {
+                const term = search.value.trim().toLowerCase();
+                let visibleCount = 0;
+
+                items.forEach(function (item) {
+                    const match = item.dataset.search.includes(term);
+                    item.style.display = match ? '' : 'none';
+                    if (match) visibleCount++;
+                });
+
+                noResults.style.display = visibleCount === 0 ? '' : 'none';
+            });
+        })();
+    </script>
+}

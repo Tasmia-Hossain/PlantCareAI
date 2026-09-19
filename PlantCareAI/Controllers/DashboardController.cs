@@ -54,6 +54,27 @@ namespace PlantCareAI.Controllers
             ViewBag.TotalWaterings = totalWaterings;
             ViewBag.TotalFertilizations = totalFertilizations;
 
+            ViewBag.RecentPlants = plants
+                .OrderByDescending(p => p.DateAdded)
+                .Take(3)
+                .ToList();
+
+            var plantsNeedingWater = plants
+                .Select(p => new
+                {
+                    Plant = p,
+                    LastWatered = p.WateringRecords
+                        .OrderByDescending(w => w.WateredAt)
+                        .Select(w => (DateTime?)w.WateredAt)
+                        .FirstOrDefault()
+                })
+                .OrderBy(x => x.LastWatered ?? DateTime.MinValue)
+                .Take(3)
+                .Select(x => x.Plant)
+                .ToList();
+
+            ViewBag.PlantsNeedingWater = plantsNeedingWater;
+
             return View();
         }
     }

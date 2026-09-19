@@ -1,36 +1,49 @@
 ﻿@model PlantCareAI.Models.FertilizingRecord
 
 @{
-    ViewData["Title"] = "Add Fertilizer Record";
+    ViewData["Title"] = "Edit Fertilizer Record";
 }
 
-<div class="container py-5">
+<div class="container page-header">
+    <span class="section-eyebrow">Update care record</span>
+
+    <h1 class="fw-bold mt-1">
+        🌱 Edit Fertilizer Record
+    </h1>
+
+    <p class="text-muted mb-0">
+        Update fertilizing information for
+        <strong>@ViewBag.PlantName</strong>.
+    </p>
+</div>
+
+<div class="container pb-5">
 
     <div class="row justify-content-center">
+
         <div class="col-md-7">
 
             <div class="form-card">
+
                 <div class="form-card-accent"></div>
+
                 <div class="card-body p-4 p-md-5">
 
-                    <div class="d-flex align-items-center gap-3 mb-4">
-                        <div class="stat-icon m-0" style="background:var(--sage-100); color:var(--forest-700);">🌱</div>
-                        <div>
-                            <h2 class="fw-bold mb-0">Add Fertilizer Record</h2>
-                            <p class="text-muted mb-0">
-                                Record fertilizer care for <strong>@ViewBag.PlantName</strong>
-                            </p>
-                        </div>
-                    </div>
+                    <form asp-action="EditFertilizer"
+                          method="post">
 
-                    <form asp-action="AddFertilizer" method="post">
-
-                        <div asp-validation-summary="ModelOnly"
-                             class="text-danger mb-3"></div>
+                        <input type="hidden"
+                               asp-for="Id" />
 
                         <input type="hidden"
                                asp-for="PlantId" />
 
+                        <div asp-validation-summary="ModelOnly"
+                             class="text-danger mb-3">
+                        </div>
+
+
+                        <!-- Date & Time -->
                         <div class="mb-3">
 
                             <label asp-for="FertilizedAt"
@@ -44,10 +57,13 @@
                                    class="form-control" />
 
                             <span asp-validation-for="FertilizedAt"
-                                  class="text-danger"></span>
+                                  class="text-danger">
+                            </span>
 
                         </div>
 
+
+                        <!-- Fertilizer -->
                         <div class="mb-3">
 
                             <label asp-for="Fertilizer"
@@ -57,21 +73,16 @@
 
                             <input asp-for="Fertilizer"
                                    class="form-control"
-                                   list="fertilizer-options"
-                                   placeholder="e.g. Liquid fertilizer" />
-                            <datalist id="fertilizer-options">
-                                <option value="Liquid fertilizer"></option>
-                                <option value="Slow-release granules"></option>
-                                <option value="Compost"></option>
-                                <option value="Worm castings"></option>
-                                <option value="Fish emulsion"></option>
-                            </datalist>
+                                   placeholder="e.g. Organic fertilizer" />
 
                             <span asp-validation-for="Fertilizer"
-                                  class="text-danger"></span>
+                                  class="text-danger">
+                            </span>
 
                         </div>
 
+
+                        <!-- Notes -->
                         <div class="mb-4">
 
                             <label asp-for="Notes"
@@ -82,24 +93,27 @@
                             <textarea asp-for="Notes"
                                       class="form-control"
                                       rows="4"
-                                      placeholder="Any additional notes..."></textarea>
+                                      placeholder="Add any notes about fertilizing..."></textarea>
 
                             <span asp-validation-for="Notes"
-                                  class="text-danger"></span>
+                                  class="text-danger">
+                            </span>
 
                         </div>
 
+
+                        <!-- Buttons -->
                         <div class="d-flex gap-2">
 
                             <button type="submit"
-                                    class="btn btn-success btn-lg">
-                                🌱 Save Record
+                                    class="btn btn-success">
+                                💾 Save Changes
                             </button>
 
                             <a asp-controller="Plants"
                                asp-action="Details"
                                asp-route-id="@Model.PlantId"
-                               class="btn btn-outline-secondary btn-lg">
+                               class="btn btn-outline-secondary">
                                 Cancel
                             </a>
 
@@ -119,6 +133,7 @@
 
 @section Scripts {
     @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+        await Html.RenderPartialAsync(
+            "_ValidationScriptsPartial");
     }
 }

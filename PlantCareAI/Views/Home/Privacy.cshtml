@@ -1,6 +1,32 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <span class="section-eyebrow">Legal</span>
+            <h1 class="fw-bold mt-1 mb-4">@ViewData["Title"]</h1>
+
+            <div class="card border-0 shadow-sm rounded-xl">
+                <div class="card-body p-4 p-md-5">
+                    <p>
+                        PlantCareAI stores the plant, care and journal information you
+                        choose to enter so that it can be shown back to you across
+                        sessions. We do not sell your data.
+                    </p>
+                    <p>
+                        When you use the AI Plant Health Assistant, the symptoms and
+                        environment details you enter are sent to a third-party AI
+                        provider to generate suggestions. Please avoid including
+                        sensitive personal information in those fields.
+                    </p>
+                    <p class="mb-0">
+                        Use this page to detail your own site's full privacy policy
+                        before deploying to production.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

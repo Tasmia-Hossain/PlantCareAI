@@ -1,124 +1,172 @@
 ﻿@{
     ViewData["Title"] = "Dashboard";
+    var recentPlants = ViewBag.RecentPlants as List<Plant> ?? new List<Plant>();
+    var plantsNeedingWater = ViewBag.PlantsNeedingWater as List<Plant> ?? new List<Plant>();
+    int totalPlants = ViewBag.TotalPlants;
 }
 
-<div class="container py-4">
+<div class="container page-header">
+    <span class="section-eyebrow">Welcome back</span>
+    <h1 class="fw-bold mt-1">🌱 Your Plant Dashboard</h1>
+    <p class="text-muted mb-0">
+        Keep your plants healthy and stay on top of their care.
+    </p>
+</div>
 
-    <div class="mb-4">
+<div class="container pb-5">
 
-        <h1 class="fw-bold">
-            🌱 PlantCareAI Dashboard
-        </h1>
+    @if (totalPlants == 0)
+    {
+        <div class="card border-0 shadow-sm rounded-xl">
+            <div class="empty-state">
+                <div class="empty-icon">🌱</div>
+                <h3>Your dashboard is ready — but empty</h3>
+                <p class="text-muted mx-auto" style="max-width: 46ch;">
+                    Add your first plant to start tracking watering, health and growth.
+                </p>
+                <a asp-controller="Plants" asp-action="Create" class="btn btn-success btn-lg mt-2">
+                    + Add Your First Plant
+                </a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Statistics -->
+        <div class="row g-4 mb-4">
 
-        <p class="text-muted">
-            Keep your plants healthy and stay on top of their care.
-        </p>
-
-    </div>
-
-
-    <!-- Statistics -->
-
-    <div class="row g-4 mb-4">
-
-        <div class="col-md-6 col-lg-3">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body">
-                    <div class="text-muted">🌿 Total Plants</div>
-                    <h2 class="fw-bold mt-2">
-                        @ViewBag.TotalPlants
-                    </h2>
+            <div class="col-md-6 col-lg-3">
+                <div class="stat-card p-4 h-100">
+                    <div class="stat-icon" style="background:var(--sage-100); color:var(--forest-700);">🌿</div>
+                    <div class="stat-value">@ViewBag.TotalPlants</div>
+                    <div class="stat-label">Total Plants</div>
                 </div>
             </div>
-        </div>
 
-
-        <div class="col-md-6 col-lg-3">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body">
-                    <div class="text-muted">💚 Healthy</div>
-                    <h2 class="fw-bold mt-2">
-                        @ViewBag.HealthyPlants
-                    </h2>
+            <div class="col-md-6 col-lg-3">
+                <div class="stat-card p-4 h-100">
+                    <div class="stat-icon" style="background:#e1f3e3; color:#2c7a45;">💚</div>
+                    <div class="stat-value">@ViewBag.HealthyPlants</div>
+                    <div class="stat-label">Healthy</div>
                 </div>
             </div>
-        </div>
 
-
-        <div class="col-md-6 col-lg-3">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body">
-                    <div class="text-muted">⚠️ Needs Attention</div>
-                    <h2 class="fw-bold mt-2">
-                        @ViewBag.NeedsAttention
-                    </h2>
+            <div class="col-md-6 col-lg-3">
+                <div class="stat-card p-4 h-100">
+                    <div class="stat-icon" style="background:#fdecd2; color:#b5731a;">⚠️</div>
+                    <div class="stat-value">@ViewBag.NeedsAttention</div>
+                    <div class="stat-label">Needs Attention</div>
                 </div>
             </div>
-        </div>
 
-
-        <div class="col-md-6 col-lg-3">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body">
-                    <div class="text-muted">💧 Waterings</div>
-                    <h2 class="fw-bold mt-2">
-                        @ViewBag.TotalWaterings
-                    </h2>
+            <div class="col-md-6 col-lg-3">
+                <div class="stat-card p-4 h-100">
+                    <div class="stat-icon" style="background:#e0edfb; color:#2f6fb0;">💧</div>
+                    <div class="stat-value">@ViewBag.TotalWaterings</div>
+                    <div class="stat-label">Waterings Logged</div>
                 </div>
             </div>
+
         </div>
 
-    </div>
+        <div class="row g-4 mb-4">
 
+            <!-- Recent Plants -->
+            <div class="col-lg-7">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="fw-bold mb-0">🪴 Recently Added</h4>
+                            <a asp-controller="Plants" asp-action="Index" class="btn btn-outline-success btn-sm">
+                                View All
+                            </a>
+                        </div>
 
-    <!-- Total Fertilizations -->
-
-    <div class="card shadow-sm border-0 mb-4">
-
-        <div class="card-body">
-
-            <div class="text-muted">
-                🌱 Total Fertilizations
+                        @if (!recentPlants.Any())
+                        {
+                            <p class="text-muted mb-0">No plants yet.</p>
+                        }
+                        else
+                        {
+                            <div class="d-flex flex-column gap-3">
+                                @foreach (var plant in recentPlants)
+                                {
+                                    <a asp-controller="Plants" asp-action="Details" asp-route-id="@plant.Id"
+                                       class="d-flex align-items-center gap-3 text-decoration-none p-2 rounded-3" style="border:1px solid var(--line);">
+                                        @if (!string.IsNullOrEmpty(plant.ImageUrl))
+                                        {
+                                            <img src="@plant.ImageUrl" alt="@plant.Name"
+                                                 style="width:56px; height:56px; object-fit:cover; border-radius:14px;" />
+                                        }
+                                        else
+                                        {
+                                            <div class="plant-img-placeholder d-flex align-items-center justify-content-center"
+                                                 style="width:56px; height:56px; border-radius:14px; font-size:1.4rem;">🌿</div>
+                                        }
+                                        <div class="flex-grow-1">
+                                            <div class="fw-bold" style="color:var(--forest-800);">@plant.Name</div>
+                                            <div class="text-muted small fst-italic">@plant.PlantType</div>
+                                        </div>
+                                        <span class="text-muted small">@plant.DateAdded.ToString("dd MMM")</span>
+                                    </a>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
             </div>
 
-            <h2 class="fw-bold mt-2">
-                @ViewBag.TotalFertilizations
-            </h2>
+            <!-- Needs Watering -->
+            <div class="col-lg-5">
+                <div class="card shadow-sm border-0 h-100">
+                    <div class="card-body p-4">
+                        <h4 class="fw-bold mb-3">💧 Water Soon</h4>
+
+                        @if (!plantsNeedingWater.Any())
+                        {
+                            <p class="text-muted mb-0">No watering data yet.</p>
+                        }
+                        else
+                        {
+                            <div class="d-flex flex-column gap-2">
+                                @foreach (var plant in plantsNeedingWater)
+                                {
+                                    var last = plant.WateringRecords.OrderByDescending(w => w.WateredAt).FirstOrDefault();
+                                    <div class="d-flex justify-content-between align-items-center p-2 rounded-3" style="border:1px solid var(--line);">
+                                        <div>
+                                            <div class="fw-semibold" style="color:var(--forest-800);">@plant.Name</div>
+                                            <div class="text-muted small">
+                                                @(last != null ? "Last watered " + last.WateredAt.ToString("dd MMM yyyy, hh:mm tt") : "Never watered yet")
+                                            </div>
+                                        </div>
+                                        <a asp-controller="Care" asp-action="AddWatering" asp-route-plantId="@plant.Id"
+                                           class="btn btn-success btn-sm">
+                                            Water
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
 
         </div>
-
-    </div>
-
+    }
 
     <!-- Quick Actions -->
-
     <div class="card shadow-sm border-0">
-
         <div class="card-body p-4">
-
-            <h3 class="fw-bold mb-4">
-                Quick Actions
-            </h3>
-
+            <h4 class="fw-bold mb-4">Quick Actions</h4>
             <div class="d-flex flex-wrap gap-3">
-
-                <a asp-controller="Plants"
-                   asp-action="Index"
-                   class="btn btn-success">
+                <a asp-controller="Plants" asp-action="Index" class="btn btn-success">
                     🌿 My Plants
                 </a>
-
-                <a asp-controller="Plants"
-                   asp-action="Create"
-                   class="btn btn-outline-success">
+                <a asp-controller="Plants" asp-action="Create" class="btn btn-outline-success">
                     + Add Plant
                 </a>
-
             </div>
-
         </div>
-
     </div>
 
 </div>
-
