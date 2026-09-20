@@ -8,6 +8,16 @@ Built with **ASP.NET Core MVC (.NET 10)**, **Entity Framework Core**, **ASP.NET 
 
 ---
 
+## 🎥 Demo
+
+A 1-minute 24-second walkthrough of PlantCareAI, showcasing plant management, care tracking, health monitoring, journaling, AI-powered plant health guidance, and the dashboard.
+
+<p align="center"> <a href="https://youtu.be/IGENDYYFM4o"> <img src="https://img.youtube.com/vi/IGENDYYFM4o/maxresdefault.jpg" width="80%" alt="PlantCareAI Demo"> </a> </p>
+
+<p align="center"> ▶️ <strong>Watch the full demo on YouTube</strong> </p>
+
+---
+
 ## 📸 Screenshots
 
 ### 🏠 Landing Page
@@ -52,7 +62,8 @@ Built with **ASP.NET Core MVC (.NET 10)**, **Entity Framework Core**, **ASP.NET 
 * Create, view, edit, and delete plant profiles
 * Store plant name, type, description, location, sunlight requirement, and watering frequency
 * Upload a real plant image directly from the device
-* Replace or remove uploaded plant images
+* Replace uploaded plant images
+* Uploaded images are removed when the plant is deleted
 * Plant data is isolated by authenticated user
 
 ### 💧 Care Tracking
@@ -61,7 +72,7 @@ Built with **ASP.NET Core MVC (.NET 10)**, **Entity Framework Core**, **ASP.NET 
 * Record fertilizing activities with date and time
 * Add notes to care records
 * Edit and delete watering and fertilizing records
-* View complete care history from the plant details page
+* View recent watering, fertilizing, health, and journal records
 
 ### ❤️ Plant Health Tracking
 
@@ -381,7 +392,7 @@ Authenticated User
  User's Care Records
 ```
 
-This prevents one user from accessing another user's plant data by manually changing record IDs in URLs.
+This helps prevent unauthorized access to another user's plant and care-record data by manually changing IDs in URLs.
 
 ### Request Protection
 
@@ -413,29 +424,6 @@ The application was tested across the main user flows, including:
 * User-specific data access
 * Delete confirmation flows
 * Database migrations and persistence
-
----
-
-## 📸 Recommended Screenshots
-
-The repository includes screenshots covering the main features of the application:
-
-| Screenshot                   | Purpose                                 |
-| ---------------------------- | --------------------------------------- |
-| `landing-page-top.png`       | Landing page hero and introduction      |
-| `landing-page-bottom.png`    | Lower sections of the landing page      |
-| `dashboard.png`              | Plant statistics and dashboard overview |
-| `my-plants.png`              | Plant collection with health statuses   |
-| `plant-details.png`          | Plant information and care history      |
-| `add-plant.png`              | Plant creation form with image upload   |
-| `ai-health-check-form.png`   | AI Health Check input form              |
-| `ai-health-check-result.png` | AI-generated plant-care analysis        |
-
-Screenshots are stored in:
-
-```text
-docs/screenshots/
-```
 
 ---
 
@@ -477,6 +465,6 @@ PlantCareAI demonstrates practical experience with:
 
 ---
 
-## 📄 License
+## 📌 Project Note
 
-This project was developed as a **personal portfolio project** to demonstrate practical software development skills.
+This project was developed as a personal portfolio project to demonstrate practical software development skills.

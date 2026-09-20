@@ -45,16 +45,29 @@
                         </dl>
                     </div>
 
-                    <form asp-action="Delete">
-                        <input type="hidden" asp-for="Id" />
+                    <form asp-action="Delete"
+                          method="post">
+
+                        @Html.AntiForgeryToken()
+
+                        <input type="hidden"
+                               asp-for="Id" />
+
                         <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-danger btn-lg">
+
+                            <button type="submit"
+                                    class="btn btn-danger btn-lg">
                                 Yes, Delete Permanently
                             </button>
-                            <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-secondary btn-lg">
+
+                            <a asp-action="Details"
+                               asp-route-id="@Model.Id"
+                               class="btn btn-outline-secondary btn-lg">
                                 Cancel
                             </a>
+
                         </div>
+
                     </form>
 
                 </div>

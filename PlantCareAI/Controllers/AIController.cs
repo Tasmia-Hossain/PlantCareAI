@@ -23,6 +23,8 @@ namespace PlantCareAI.Controllers
             _aiPlantService = aiPlantService;
         }
 
+
+        // GET: AI/PlantHealth?plantId=5
         [HttpGet]
         public async Task<IActionResult> PlantHealth(int plantId)
         {
@@ -35,7 +37,9 @@ namespace PlantCareAI.Controllers
                          p.UserId == userId);
 
             if (plant == null)
+            {
                 return NotFound();
+            }
 
             var model = new AiPlantAnalysisViewModel
             {
@@ -46,6 +50,8 @@ namespace PlantCareAI.Controllers
             return View(model);
         }
 
+
+        // POST: AI/PlantHealth
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> PlantHealth(
@@ -54,22 +60,31 @@ namespace PlantCareAI.Controllers
             var userId = User.FindFirstValue(
                 ClaimTypes.NameIdentifier);
 
+            // Verify that the selected plant belongs
+            // to the currently logged-in user.
             var plant = await _context.Plants
                 .FirstOrDefaultAsync(
                     p => p.Id == model.PlantId &&
                          p.UserId == userId);
 
             if (plant == null)
+            {
                 return NotFound();
+            }
 
+
+            // Preserve the plant name when validation fails.
             if (!ModelState.IsValid)
             {
                 model.PlantName = plant.Name;
+
                 return View(model);
             }
 
+
             try
             {
+                // Send plant information to the AI service.
                 var rawResult =
                     await _aiPlantService.AnalyzePlantHealthAsync(
                         plant.Name,
@@ -77,10 +92,22 @@ namespace PlantCareAI.Controllers
                         model.Environment,
                         model.AdditionalNotes);
 
+
                 model.PlantName = plant.Name;
 
+
+                // Convert AI Markdown output to HTML.
+                // Raw HTML from the AI response is disabled
+                // for safer rendering.
+                var pipeline = new MarkdownPipelineBuilder()
+                    .DisableHtml()
+                    .Build();
+
                 model.AnalysisResult =
-                    Markdown.ToHtml(rawResult);
+                    Markdown.ToHtml(
+                        rawResult,
+                        pipeline);
+
 
                 return View(model);
             }

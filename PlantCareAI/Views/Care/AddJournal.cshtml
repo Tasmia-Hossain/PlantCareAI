@@ -1,21 +1,5 @@
 ﻿@model PlantCareAI.Models.JournalEntry
 
-<div class="mb-3">
-
-    <label asp-for="CreatedAt"
-           class="form-label">
-        Date &amp; Time
-    </label>
-
-    <input asp-for="CreatedAt"
-           type="datetime-local"
-           class="form-control" />
-
-    <span asp-validation-for="CreatedAt"
-          class="text-danger">
-    </span>
-
-</div>
 @{
     ViewData["Title"] = "Add Journal Entry";
 }
@@ -26,27 +10,65 @@
         <div class="col-md-8">
 
             <div class="form-card">
+
                 <div class="form-card-accent"></div>
+
                 <div class="card-body p-4 p-md-5">
 
                     <div class="d-flex align-items-center gap-3 mb-4">
-                        <div class="stat-icon m-0" style="background:#fdf0e7; color:var(--terracotta-dark);">📖</div>
+
+                        <div class="stat-icon m-0"
+                             style="background:#fdf0e7; color:var(--terracotta-dark);">
+                            📖
+                        </div>
+
                         <div>
-                            <h2 class="fw-bold mb-0">Add Journal Entry</h2>
+                            <h2 class="fw-bold mb-0">
+                                Add Journal Entry
+                            </h2>
+
                             <p class="text-muted mb-0">
-                                Record something about <strong>@ViewBag.PlantName</strong>
+                                Record something about
+                                <strong>@ViewBag.PlantName</strong>
                             </p>
                         </div>
+
                     </div>
 
-                    <form asp-action="AddJournal" method="post">
+
+                    <form asp-action="AddJournal"
+                          method="post">
 
                         <div asp-validation-summary="ModelOnly"
-                             class="text-danger mb-3"></div>
+                             class="text-danger mb-3">
+                        </div>
+
 
                         <input type="hidden"
                                asp-for="PlantId" />
 
+
+                        <!-- Date & Time -->
+                        <div class="mb-3">
+
+                            <label asp-for="CreatedAt"
+                                   class="form-label">
+                                Date &amp; Time
+                            </label>
+
+                            <input asp-for="CreatedAt"
+                                   type="datetime-local"
+                                   asp-format="{0:yyyy-MM-ddTHH:mm}"
+                                   class="form-control" />
+
+                            <span asp-validation-for="CreatedAt"
+                                  class="text-danger">
+                            </span>
+
+                        </div>
+
+
+                        <!-- Title -->
                         <div class="mb-3">
 
                             <label asp-for="Title"
@@ -59,10 +81,13 @@
                                    placeholder="e.g. New leaves appeared" />
 
                             <span asp-validation-for="Title"
-                                  class="text-danger"></span>
+                                  class="text-danger">
+                            </span>
 
                         </div>
 
+
+                        <!-- Journal Content -->
                         <div class="mb-4">
 
                             <label asp-for="Content"
@@ -76,10 +101,13 @@
                                       placeholder="Write about your plant..."></textarea>
 
                             <span asp-validation-for="Content"
-                                  class="text-danger"></span>
+                                  class="text-danger">
+                            </span>
 
                         </div>
 
+
+                        <!-- Buttons -->
                         <div class="d-flex gap-2">
 
                             <button type="submit"
@@ -103,13 +131,15 @@
             </div>
 
         </div>
-
     </div>
 
 </div>
 
+
 @section Scripts {
+
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
 }

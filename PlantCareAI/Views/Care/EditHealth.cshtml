@@ -5,7 +5,10 @@
 }
 
 <div class="container page-header">
-    <span class="section-eyebrow">Update care record</span>
+
+    <span class="section-eyebrow">
+        Update care record
+    </span>
 
     <h1 class="fw-bold mt-1">
         🩺 Edit Health Record
@@ -15,7 +18,9 @@
         Update health information for
         <strong>@ViewBag.PlantName</strong>.
     </p>
+
 </div>
+
 
 <div class="container pb-5">
 
@@ -37,6 +42,7 @@
 
                         <input type="hidden"
                                asp-for="PlantId" />
+
 
                         <div asp-validation-summary="ModelOnly"
                              class="text-danger mb-3">
@@ -71,9 +77,30 @@
                                 Health Status
                             </label>
 
-                            <input asp-for="HealthStatus"
-                                   class="form-control"
-                                   placeholder="e.g. Healthy, Needs Attention" />
+                            <select asp-for="HealthStatus"
+                                    class="form-select">
+
+                                <option value="">
+                                    Select health status
+                                </option>
+
+                                <option value="Healthy">
+                                    💚 Healthy
+                                </option>
+
+                                <option value="Needs Attention">
+                                    ⚠️ Needs Attention
+                                </option>
+
+                                <option value="Recovering">
+                                    🌱 Recovering
+                                </option>
+
+                                <option value="Critical">
+                                    🚨 Critical
+                                </option>
+
+                            </select>
 
                             <span asp-validation-for="HealthStatus"
                                   class="text-danger">
@@ -151,9 +178,12 @@
 
 </div>
 
+
 @section Scripts {
+
     @{
         await Html.RenderPartialAsync(
             "_ValidationScriptsPartial");
     }
+
 }
